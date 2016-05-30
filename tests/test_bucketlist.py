@@ -47,7 +47,7 @@ class TestBucketList(unittest.TestCase):
 
     def create_bucketlist(self):
         self.login()
-        self.bucketlist_request = self.app.post("/bucketlists/",
+        self.app.post("/bucketlists/",
                                    data={"name": "BucketList1"},
                                    headers={"Token": self.token})
 
