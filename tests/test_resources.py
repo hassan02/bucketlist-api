@@ -13,7 +13,7 @@ class TestBucketList(unittest.TestCase):
     def setUp(self):
         # Clear entry in the database
         BASEDIR = os.path.abspath(os.path.dirname(__file__))
-        database_name = os.path.join(BASEDIR, 'test_bucketlist.sqlite')
+        database_name = os.path.join(BASEDIR, 'bucketlist_test.sqlite')
         db_conn = sqlite3.connect(database_name)
         db_cursor = db_conn.cursor()
         db_cursor.execute('DELETE FROM user')
@@ -76,7 +76,7 @@ class TestBucketList(unittest.TestCase):
       self.register_request = self.app.post('/auth/register', data={'username': '', 'password': 'andela'})
       self.assertEqual(self.register_request.status_code, 406)
 
-    
+
 
 
 
