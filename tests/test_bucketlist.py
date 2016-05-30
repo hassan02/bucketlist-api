@@ -11,8 +11,12 @@ from app.helpers import *
 
 class TestBucketList(unittest.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         # Clear entry in the database
+        BASEDIR = os.path.abspath(os.path.dirname(__file__))
+
+    def setUp(self):
         BASEDIR = os.path.abspath(os.path.dirname(__file__))
         database_name = os.path.join(BASEDIR, 'bucketlist_test.sqlite')
         db_conn = sqlite3.connect(database_name)
@@ -46,26 +50,81 @@ class TestBucketList(unittest.TestCase):
         self.bucketlist_request = self.app.post("/bucketlists/",
                                    data={"name": "BucketList1"},
                                    headers={"Token": self.token})
-        #result = json.loads(self.bucketlist_request.data)
-        #self.assertTrue(result["message"] == "Saved" and result["name"] == "BucketList1")
+
+    def create_bucketlist_item(self):
+        self.create_bucketlist()
+        bucketlist_id = BucketList.query.filter_by(name="BucketList1").first().id
+        self.bucketlist_item_request = self.app.post("/bucketlists/{}/items/".format(bucketlist_id),
+                                   data={"name": "I want to buy a Ferrarri"},
+                                   headers={"Token": self.token})
+
+        # result = json.loads(self.bucketlist_request.data)
+        # self.assertTrue(result["message"] == "Saved" and result["name"] ==
+        # "BucketList1")
 
     def test_post_bucketlist(self):
         self.create_bucketlist()
-        bucketlist = BucketList.query.filter_by(name="BucketList1").first()
+        bucketlist=BucketList.query.filter_by(name="BucketList1").first()
         self.assertIsNotNone(bucketlist)
-        #self.bucketlist_request = self.app.post('/bucketlists/', data={"name": "BucketList1"})
+        # self.bucketlist_request = self.app.post('/bucketlists/',
+        # data={"name": "BucketList1"})
 
     def test_get_empty_bucketlist(self):
         self.login()
-        self.bucketlist_request = self.app.get("/bucketlists/",  
-                       data={"name": "BucketList1"},
+        self.bucketlist_request=self.app.get("/bucketlists/",
                                    headers={"Token": self.token})
         self.assertEqual(self.bucketlist_request.status_code, 200)
-        result = json.loads(self.bucketlist_request.data)
-        self.assertEqual(result["message"], "Cannot locate any bucketlist for user")
+        result=json.loads(self.bucketlist_request.data)
+        self.assertEqual(result["message"],
+                         "Cannot locate any bucketlist for user")
 
-    def test_create_bucketlist_item(self):
-        pass
+    def test_get_all_bucketlist(self):
+        self.create_bucketlist()
+        self.bucketlist_request=self.app.get("/bucketlists/",
+                                   headers={"Token": self.token})
+        result=json.loads(self.bucketlist_request.data)
+        bucketlist_info=result["data"][0]
+        self.assertEqual(bucketlist_info["name"], "BucketList1")
+        self.assertEqual(bucketlist_info["items"], [])
+
+    def test_put_bucketlist(self):
+        self.create_bucketlist()
+        bucketlist_id=BucketList.query.filter_by(name="BucketList1").first().id
+        self.bucketlist_request=self.app.put("/bucketlists/{}".format(bucketlist_id),
+                                   data={"name": "BucketList2"},
+                                   headers={"Token": self.token})
+        self.assertEqual(self.bucketlist_request.status_code, 200)
+        bucketlist1=BucketList.query.filter_by(name="BucketList1").first()
+        bucketlist2=BucketList.query.filter_by(name="BucketList2").first()
+        self.assertIsNone(bucketlist1)
+        self.assertIsNotNone(bucketlist2)
+
+    def test_put_bucketlist_with_existing_name(self):
+        self.create_bucketlist()
+        bucketlist_id=BucketList.query.filter_by(name="BucketList1").first().id
+        self.bucketlist_request=self.app.put("/bucketlists/{}".format(bucketlist_id),
+                                   data={"name": "BucketList1"},
+                                   headers={"Token": self.token})
+        self.assertEqual(self.bucketlist_request.status_code, 406)
+
+
+    def test_get_single_bucketlist(self):
+        self.create_bucketlist()
+        bucketlist_id=BucketList.query.filter_by(name="BucketList1").first().id
+        self.bucketlist_request=self.app.get("/bucketlists/{}".format(bucketlist_id),
+                                   data={"name": "BucketList2"},
+                                   headers={"Token": self.token})
+        result=json.loads(self.bucketlist_request.data)
+        bucketlist_info=result["data"]
+        self.assertEqual(bucketlist_info["name"], "BucketList1")
+        self.assertEqual(bucketlist_info["items"], [])
+
+    def test_post_bucketlist_item(self):
+        self.create_bucketlist_item()
+        bucketlist_item = BucketListItem.query.filter_by(name="I want to buy a Ferrarri")
+        self.assertIsNotNone(bucketlist_item)
+
+        
 
 
 if __name__ == '__main__':
