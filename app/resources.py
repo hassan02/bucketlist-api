@@ -19,7 +19,7 @@ class LoginUser(Resource):
                     token = jwt.encode(user_data, secret_key)
                     return {"message": "Succesful login. Please use this token for authentication",
                                     "token": token,
-                                    "user_id": get_current_user_id(token)
+                                    #"user_id": get_current_user_id(token)
                                     }, 200
                 else:
                     return messages["password_incorrect"], 406
@@ -92,7 +92,7 @@ class AllBucketLists(Resource):
         created_by=user_id).all()
         if all_bucketlist:
             bucketlist_output = [get_bucketlist(bucketlist) for bucketlist in all_bucketlist]
-            return (jsonify({"data": bucketlist_output}), 200)   
+            return jsonify({"data": bucketlist_output})   
         else:
             return messages["no_bucketlist"], 200
 
@@ -105,14 +105,14 @@ class AllBucketLists(Resource):
             name=name, created_by=current_user).first()
         if name:
             if bucketlist:
-                return messages["bucketlist_exist"]
+                return messages["bucketlist_exist"], 400
             else:
                 bucketlist = BucketList(name, current_user)
-                return jsonify({"message": "Saved",
-                                "name": name,
-                                "created_by": current_user
-                                }), 200 if bucketlist.save() \
-                    else messages["bucketlist_not_saved"], 400
+                return {"message": "Saved",
+                        "name": name,
+                        "created_by": current_user
+                        } if bucketlist.save() \
+                        else messages["bucketlist_not_saved"], 400
         else:
             return messages["no_bucketlist_name"], 400
 
@@ -128,10 +128,10 @@ class AllBucketListItems(Resource):
                 return messages["bucketlist_item_exist"]
             else:
                 bucketlist_item = BucketListItem(name=name, bucketlist_id=id)
-                return jsonify({"message": "Saved",
-                                "name": name,
-                                "bucketlist_id": id
-                                }),200 if bucketlist_item.save() \
+                return {"message": "Saved",
+                        "name": name,
+                        "bucketlist_id": id
+                                } if bucketlist_item.save() \
                     else messages["bucketlist_item_not_saved"], 400
         else:
             return messages["no_bucketlist_item_name"], 400
@@ -168,33 +168,26 @@ class SingleBucketListItem(Resource):
         done = True if str(done).lower() == "true" else False
         check_bucketlist_item_details = BucketListItem.query.filter_by(
           name=name, id=item_id, bucketlist_id=id, done=done).first()
-        if bucketlist_item:
-            if not check_bucketlist_item_details:
-                try:
-                    bucketlist_item.name = name
-                    bucketlist_item.done = done
-                    db.session.commit()
-                    return messages["bucketlist_item_updated"], 200
-                except:
-                    return messages["bucketlist_item_not_updated"], 400
-            else:
-                return messages["bucketlist_item_exist"], 400
+        if not check_bucketlist_item_details:
+            try:
+                bucketlist_item.name = name
+                bucketlist_item.done = done
+                db.session.commit()
+                return messages["bucketlist_item_updated"], 200
+            except:
+                return messages["bucketlist_item_not_updated"], 400
         else:
-            return messages["no_bucketlist_item"], 400
+            return messages["bucketlist_item_exist"], 400
 
     @auth.user_is_login
     @auth.bucketlist_exist
     @auth.bucketlist_item_exist
     def delete(self, id, item_id):
         bucketlist_item = BucketListItem.query.filter_by(id=item_id,bucketlist_id=id).first()
-        if bucketlist_item:
-            try:
-                db.session.delete(bucketlist_item)
-                db.session.commit()
-                return messages["bucketlist_item_deleted"], 204
-            except:
-                return messages["bucketlist_item_not_deleted"], 400
-        else:
-            return messages["no_bucketlist_item"], 400
-
+        try:
+            db.session.delete(bucketlist_item)
+            db.session.commit()
+            return messages["bucketlist_item_deleted"], 204
+        except:
+            return messages["bucketlist_item_not_deleted"], 400
 

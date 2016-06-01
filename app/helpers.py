@@ -13,7 +13,7 @@ def get_current_user_id(token):
         decoded = jwt.decode(token, secret_key)
         return User.query.filter_by(username=decoded['username']).first().id
     except:
-        abort(400, message="Cannot authenticate user")
+        abort(401, message="Cannot authenticate user")
 
 def get_bucketlist(bucketlist):
     return {"id": bucketlist.id,
