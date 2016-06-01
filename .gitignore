@@ -1,0 +1,5 @@
+*flaskapi_venv
+*.pyc
+*migrations
+*bucketlist.sqlite
+*.ini
