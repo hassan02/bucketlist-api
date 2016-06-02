@@ -45,6 +45,12 @@ class TestBucketList(unittest.TestCase):
             "/bucketlists/", data={"name": "BucketList1"})
         self.assertEqual(self.bucketlist_request.status_code, 401)
 
+    #def test_get_current_user_id_with_invalid_token(self):
+    #    bucketlist_request = self.app.post("/bucketlists/",
+    #                  data={"name": "BucketList1"},
+    #                  headers={"Token": "35535335433"})
+    #    self.assertEqual(bucketlist_request.status_code, 401)
+
     def create_bucketlist_item(self):
         self.create_bucketlist()
         bucketlist_id = BucketList.query.filter_by(
