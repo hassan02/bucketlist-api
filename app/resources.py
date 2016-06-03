@@ -1,9 +1,9 @@
-from models import BucketList, BucketListItem
-from decorators import auth
+from .models import BucketList, BucketListItem
+from .decorators import auth
 from flask_restful import Resource
 from flask import jsonify, request
-from helpers import *
-from models import db
+from .helpers import *
+from .models import db
 import json
 
 

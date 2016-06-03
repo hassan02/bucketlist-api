@@ -1,4 +1,4 @@
-from models import User, BucketListItem, db
+from .models import User, BucketListItem, db
 from flask import current_app, jsonify, request
 from flask.ext.api.exceptions import AuthenticationFailed, PermissionDenied, \
     NotFound
