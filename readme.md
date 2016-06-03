@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/andela-hoyeboade/bucketlist-api.svg?branch=develop)](https://travis-ci.org/andela-hoyeboade/bucketlist-api) [![Coverage Status](https://coveralls.io/repos/github/andela-hoyeboade/bucketlist-api/badge.svg?branch=develop)](https://coveralls.io/github/andela-hoyeboade/bucketlist-api?branch=develop)
+[![Build Status](https://travis-ci.org/andela-hoyeboade/bucketlist-api.svg?branch=develop)](https://travis-ci.org/andela-hoyeboade/bucketlist-api) [![Coverage Status](https://coveralls.io/repos/github/andela-hoyeboade/bucketlist-api/badge.svg?branch=develop)](https://coveralls.io/github/andela-hoyeboade/bucketlist-api?branch=develop) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/andela-hoyeboade/bucketlist-api/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/andela-hoyeboade/bucketlist-api/?branch=develop)
 
 
 
