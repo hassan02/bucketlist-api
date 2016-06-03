@@ -2,12 +2,3 @@ checks:
     python:
         code_rating: true
         duplicate_code: true
-build:
-    tests:
-        override:
-            -
-                command: './run-tests.sh'
-                coverage:
-                    file: '.coverage'
-                    config_file: '.coveragerc'
-                    format: 'py-cc'
