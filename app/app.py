@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask.ext.api import FlaskAPI
 from flask.ext.api.exceptions import \
     AuthenticationFailed, NotFound, NotAcceptable, ParseError
-from decorators import auth
+from .decorators import auth
 from flask_restful import Api
 
 from helpers import messages
