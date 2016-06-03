@@ -18,9 +18,7 @@ class LoginUser(Resource):
                     secret_key = current_app.config.get('SECRET_KEY')
                     token = jwt.encode(user_data, secret_key)
                     return {"message": "Succesful login. Please use this token for authentication",
-                                    "token": token,
-                                    #"user_id": get_current_user_id(token)
-                                    }, 200
+                                    "token": token}, 200
                 else:
                     return messages["password_incorrect"], 406
             else:
@@ -86,10 +84,12 @@ class SingleBucketList(Resource):
 class AllBucketLists(Resource):
     @auth.user_is_login
     def get(self):
+        limit = request.args.get("limit",20)
+        search_by = request.args.get("q","")
         token = request.headers.get('Token')
         user_id = get_current_user_id(token)
         all_bucketlist = BucketList.query.filter_by(
-        created_by=user_id).all()
+        created_by=user_id).filter(BucketList.name.like("%{}%".format(search_by))).all()
         if all_bucketlist:
             bucketlist_output = [get_bucketlist(bucketlist) for bucketlist in all_bucketlist]
             return jsonify({"data": bucketlist_output})   
@@ -130,7 +130,7 @@ class AllBucketListItems(Resource):
                 bucketlist_item = BucketListItem(name=name, bucketlist_id=id)
                 return {"message": "Saved",
                         "name": name,
-                        "bucketlist_id": id
+                        "bucketlist_id": id,
                                 } if save_model(bucketlist_item) \
                     else messages["bucketlist_item_not_saved"], 400
         else:
