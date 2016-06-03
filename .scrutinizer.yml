@@ -3,9 +3,14 @@ checks:
         code_rating: true
         duplicate_code: true
 build:
+    dependencies:
+        before:
+            - pip install nose
+            - pip install coverage
     tests:
         override:
             -
+                command: nosetests --with-coverage
                 coverage:
                     file: '.coverage'
                     config_file: '.coveragerc'
