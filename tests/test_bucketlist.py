@@ -1,8 +1,8 @@
-import sqlite3
-import unittest
-import os
 import hashlib
 import json
+import os
+import sqlite3
+import unittest
 
 from app.models import SQLAlchemy, User, BucketList, BucketListItem
 from app import app

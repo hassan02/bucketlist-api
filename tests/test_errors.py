@@ -1,11 +1,9 @@
+import hashlib
+import os
 import sqlite3
 import unittest
-import os
-import hashlib
 
-from app.models import SQLAlchemy, User, BucketList, BucketListItem
 from app import app
-from app.helpers import *
 
 
 class TestErrors(unittest.TestCase):
