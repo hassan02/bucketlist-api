@@ -11,11 +11,6 @@ from app.helpers import *
 
 class TestBucketList(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        # Clear entry in the database
-        BASEDIR = os.path.abspath(os.path.dirname(__file__))
-
     def setUp(self):
         BASEDIR = os.path.abspath(os.path.dirname(__file__))
         database_name = os.path.join(BASEDIR, 'bucketlist_test.sqlite')
@@ -45,12 +40,6 @@ class TestBucketList(unittest.TestCase):
             "/api/v1/bucketlists/", data={"name": "BucketList1"})
         self.assertEqual(self.bucketlist_request.status_code, 401)
 
-    #def test_get_current_user_id_with_invalid_token(self):
-    #    bucketlist_request = self.app.post("/api/v1/bucketlists/",
-    #                  data={"name": "BucketList1"},
-    #                  headers={"Token": "35535335433"})
-    #    self.assertEqual(bucketlist_request.status_code, 401)
-
     def create_bucketlist_item(self):
         self.create_bucketlist()
         bucketlist_id = BucketList.query.filter_by(
@@ -67,25 +56,10 @@ class TestBucketList(unittest.TestCase):
                       data={"name": "BucketList1"},
                       headers={"Token": self.token})
 
-    def create_bucketlist_item(self):
-        self.create_bucketlist()
-        bucketlist_id = BucketList.query.filter_by(
-            name="BucketList1").first().id
-        self.bucketlist_item_request = self.app.post("/api/v1/bucketlists/{}/items/".format(bucketlist_id),
-                                                     data={
-                                                         "name": "I want to buy a Ferrarri"},
-                                                     headers={"Token": self.token})
-
-        # result = json.loads(self.bucketlist_request.data)
-        # self.assertTrue(result["message"] == "Saved" and result["name"] ==
-        # "BucketList1")
-
     def test_post_bucketlist(self):
         self.create_bucketlist()
         bucketlist = BucketList.query.filter_by(name="BucketList1").first()
         self.assertIsNotNone(bucketlist)
-        # self.bucketlist_request = self.app.post('/api/v1/bucketlists/',
-        # data={"name": "BucketList1"})
 
     def test_get_empty_bucketlist(self):
         self.login()
