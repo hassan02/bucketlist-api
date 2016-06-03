@@ -23,7 +23,7 @@ class TestErrors(unittest.TestCase):
     self.assertEqual(response.status_code, 200)
 
   def test_unallowed_method(self):
-    response = self.app.put('/bucketlists/')
+    response = self.app.put('api/v1/bucketlists/')
     self.assertEqual(response.status_code, 405)
 
 if __name__ == '__main__':
