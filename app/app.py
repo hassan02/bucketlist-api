@@ -1,13 +1,8 @@
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from flask.ext.api import FlaskAPI
-from flask.ext.api.exceptions import \
-    AuthenticationFailed, NotFound, NotAcceptable, ParseError
-from .decorators import auth
+from flask import Flask
 from flask_restful import Api
 
-from helpers import messages
-from resources import *
+from .helpers import messages
+from .resources import *
 
 
 app = Flask(__name__)

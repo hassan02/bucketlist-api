@@ -1,10 +1,10 @@
 import hashlib
 
-from sqlalchemy import Column, String, Integer, ForeignKey
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask_sqlalchemy import sqlalchemy
+
+
 db = SQLAlchemy()
-class_mapper = sqlalchemy.orm.class_mapper
+
 
 class Base(db.Model):
     """Base model that other models inherit from.

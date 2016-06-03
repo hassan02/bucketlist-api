@@ -1,9 +1,9 @@
-from .models import User, BucketListItem, db
-from flask import current_app, jsonify, request
-from flask.ext.api.exceptions import AuthenticationFailed, PermissionDenied, \
-    NotFound
 import jwt
-from flask_restful import reqparse, abort
+
+from flask import current_app
+from flask_restful import abort
+
+from .models import User, BucketListItem, db
 
 
 def save_model(self):      
