@@ -7,7 +7,7 @@ build:
     tests:
         override:
             -
-                command: './run-tests.sh'
+                command: 'nosetests --with-coverage'
                 coverage:
                     file: '.coverage'
                     config_file: '.coveragerc'
