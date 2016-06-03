@@ -1,13 +1,14 @@
 from flask import Flask
 from flask_restful import Api
+from flask_sqlalchemy import SQLAlchemy
 
 from .helpers import messages
 from .resources import *
 
-
 app = Flask(__name__)
 app.config.from_object('config')
 app.config["JSON_SORT_KEYS"] = False
+db = SQLAlchemy(app)
 
 api = Api(app)
 api.add_resource(LoginUser, "/auth/login")
