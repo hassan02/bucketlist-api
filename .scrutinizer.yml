@@ -2,3 +2,11 @@ checks:
     python:
         code_rating: true
         duplicate_code: true
+build:
+    tests:
+        override:
+            -
+                coverage:
+                    file: '.coverage'
+                    config_file: '.coveragerc'
+                    format: 'py-cc'
