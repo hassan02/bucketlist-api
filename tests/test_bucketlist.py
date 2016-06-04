@@ -7,20 +7,13 @@ import unittest
 from app.models import SQLAlchemy, User, BucketList, BucketListItem
 from app import app
 from app.helpers import *
+from helpers import *
 
 
 class TestBucketList(unittest.TestCase):
 
     def setUp(self):
-        BASEDIR = os.path.abspath(os.path.dirname(__file__))
-        database_name = os.path.join(BASEDIR, 'bucketlist_test.sqlite')
-        db_conn = sqlite3.connect(database_name)
-        db_cursor = db_conn.cursor()
-        db_cursor.execute('DELETE FROM user')
-        db_cursor.execute('DELETE FROM bucket_list')
-        db_cursor.execute('DELETE FROM bucket_list_item')
-        db_conn.commit()
-        db_conn.close()
+        setupDatabase()
         app.config.from_object('config_test')
         self.app = app.test_client()
         self.user_data = {'username': 'test_user', 'password': 'test_password'}
@@ -152,7 +145,7 @@ class TestBucketList(unittest.TestCase):
         self.assertEqual(bucketlist_item_request.status_code, 200)
         result = json.loads(bucketlist_item_request.data)
         self.assertEqual(result["message"],
-                         "Cannot locate any bucketlistitems")
+                         "Cannot locate any bucketlist items")
 
     def test_get_bucketlist_item(self):
         self.create_bucketlist_item()
