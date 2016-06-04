@@ -41,6 +41,8 @@ class TestBucketList(unittest.TestCase):
                                                      data={
                                                          "name": "I want to buy a Ferrarri"},
                                                      headers={"Token": self.token})
+        self.bucketlist_item = BucketListItem.query.filter_by(
+            name="I want to buy a Ferrarri").first()
 
 
     def create_bucketlist(self):
@@ -122,16 +124,12 @@ class TestBucketList(unittest.TestCase):
         
     def test_post_bucketlist_item(self):
         self.create_bucketlist_item()
-        bucketlist_item = BucketListItem.query.filter_by(
-            name="I want to buy a Ferrarri").first()
-        self.assertIsNotNone(bucketlist_item)
+        self.assertIsNotNone(self.bucketlist_item)
 
     def test_get_single_bucketlist_item(self):
         self.create_bucketlist_item()
-        bucketlist_item = BucketListItem.query.filter_by(
-            name="I want to buy a Ferrarri").first()
-        self.assertIsNotNone(bucketlist_item)
-        item_id, bucketlist_id = bucketlist_item.id, bucketlist_item.bucketlist_id
+        self.assertIsNotNone(self.bucketlist_item)
+        item_id, bucketlist_id = self.bucketlist_item.id, self.bucketlist_item.bucketlist_id
         self.bucketlist_item_request = self.app.get("/api/v1/bucketlists/{}/items/{}".format(bucketlist_id, item_id),
                                                     headers={"Token": self.token})
         self.assertIsNotNone(self.bucketlist_item_request.data)
@@ -158,9 +156,7 @@ class TestBucketList(unittest.TestCase):
 
     def test_put_bucketlist_item(self):
         self.create_bucketlist_item()
-        bucketlist_item = BucketListItem.query.filter_by(
-            name="I want to buy a Ferrarri").first()
-        item_id, bucketlist_id = bucketlist_item.id, bucketlist_item.bucketlist_id
+        item_id, bucketlist_id = self.bucketlist_item.id, self.bucketlist_item.bucketlist_id
         bucketlist_request = self.app.put("/api/v1/bucketlists/{}/items/{}".format(bucketlist_id, item_id),
                                           data={
                                               "name": "I want to buy a Sport Car", "done": True},
@@ -169,9 +165,7 @@ class TestBucketList(unittest.TestCase):
 
     def test_put_bucketlist_item_with_existing_name(self):
         self.create_bucketlist_item()
-        bucketlist_item = BucketListItem.query.filter_by(
-            name="I want to buy a Ferrarri").first()
-        item_id, bucketlist_id = bucketlist_item.id, bucketlist_item.bucketlist_id
+        item_id, bucketlist_id = self.bucketlist_item.id, self.bucketlist_item.bucketlist_id
         bucketlist_item_request = self.app.put("/api/v1/bucketlists/{}/items/{}".format(bucketlist_id, item_id),
                                           data={
                                               "name": "I want to buy a Ferrarri"},
@@ -180,9 +174,7 @@ class TestBucketList(unittest.TestCase):
 
     def test_delete_bucketlist_item(self):
         self.create_bucketlist_item()
-        bucketlist_item = BucketListItem.query.filter_by(
-            name="I want to buy a Ferrarri").first()
-        item_id, bucketlist_id = bucketlist_item.id, bucketlist_item.bucketlist_id
+        item_id, bucketlist_id = self.bucketlist_item.id, self.bucketlist_item.bucketlist_id
         bucketlist_item_request = self.app.delete(
             "/api/v1/bucketlists/{}/items/{}".format(bucketlist_id, item_id), headers={"Token": self.token})
         self.assertEqual(bucketlist_item_request.status_code, 204)
