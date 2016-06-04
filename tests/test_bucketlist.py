@@ -56,6 +56,28 @@ class TestBucketList(unittest.TestCase):
         bucketlist = BucketList.query.filter_by(name="BucketList1").first()
         self.assertIsNotNone(bucketlist)
 
+    def test_post_bucketlist_with_existing_name(self):
+        self.create_bucketlist()
+        self.bucketlist_request = self.app.post("/api/v1/bucketlists/",
+                                               data={"name": "BucketList1"},
+                                               headers={"Token": self.token})
+        self.assertEqual(self.bucketlist_request.status_code, 400)
+        result = json.loads(self.bucketlist_request.data)
+        self.assertEqual(result["message"],
+                         "Bucketlist already exist")
+
+    def test_post_bucketlist_with_no_name(self):
+        self.create_bucketlist()
+        self.bucketlist_request = self.app.post("/api/v1/bucketlists/",
+                                               data={"name": ""},
+                                               headers={"Token": self.token})
+        self.assertEqual(self.bucketlist_request.status_code, 400)
+        result = json.loads(self.bucketlist_request.data)
+        self.assertEqual(result["message"],
+                         "Please supply bucketlist name")
+
+
+
     def test_get_empty_bucketlist(self):
         self.login()
         self.bucketlist_request = self.app.get("/api/v1/bucketlists/",
@@ -171,6 +193,31 @@ class TestBucketList(unittest.TestCase):
                                               "name": "I want to buy a Ferrarri"},
                                           headers={"Token": self.token})
         self.assertEqual(bucketlist_item_request.status_code, 400)
+
+    def test_post_bucketlist_item_with_existing_name(self):
+        self.create_bucketlist_item()
+        bucketlist_id = self.bucketlist_item.bucketlist_id
+        bucketlist_item_request = self.app.post("/api/v1/bucketlists/{}/items/".format(bucketlist_id),
+                                          data={
+                                              "name": "I want to buy a Ferrarri"},
+                                          headers={"Token": self.token})
+        self.assertEqual(bucketlist_item_request.status_code, 400)
+        result = json.loads(bucketlist_item_request.data)
+        self.assertEqual(result["message"],
+                         "Bucketlist item already exist")
+
+    def test_post_bucketlist_item_with_no_name(self):
+        self.create_bucketlist_item()
+        bucketlist_id = self.bucketlist_item.bucketlist_id
+        bucketlist_item_request = self.app.post("/api/v1/bucketlists/{}/items/".format(bucketlist_id),
+                                          data={
+                                              "name": ""},
+                                          headers={"Token": self.token})
+        self.assertEqual(bucketlist_item_request.status_code, 400)
+        result = json.loads(bucketlist_item_request.data)
+        self.assertEqual(result["message"],
+                         "Please supply name for your bucketlist item")
+
 
     def test_delete_bucketlist_item(self):
         self.create_bucketlist_item()

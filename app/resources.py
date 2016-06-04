@@ -126,7 +126,7 @@ class AllBucketListItems(Resource):
             name=name, bucketlist_id=id).first()
         if name:
             if bucketlist_item:
-                return messages["bucketlist_item_exist"]
+                return messages["bucketlist_item_exist"], 400
             else:
                 bucketlist_item = BucketListItem(name=name, bucketlist_id=id)
                 return {"message": "Saved",
