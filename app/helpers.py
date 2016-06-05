@@ -6,14 +6,6 @@ from flask_restful import abort
 from .models import User, BucketListItem, db
 
 
-def save_model(self):      
-        try:
-            db.session.add(self)
-            db.session.commit()
-            return True
-        except:
-            return False
-
 def get_current_user_id(token):
     try:
         secret_key = current_app.config.get('SECRET_KEY')
@@ -57,6 +49,14 @@ def delete_model(model):
         return True
     except:
         return False
+
+def save_model(model):      
+        try:
+            db.session.add(model)
+            db.session.commit()
+            return True
+        except:
+            return False
 
         
 messages = {"username_not_found": {"message": "username does not exist"},
