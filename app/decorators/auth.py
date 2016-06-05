@@ -13,19 +13,13 @@ import hashlib
 
 
 def valid_username(username):
-    user = User.query.filter_by(username=username).first()
-    if user:
-        return True
-    else:
-        return False
+    return True if User.query.filter_by(username=username).first() else False
 
-def valid_password(username,password):
-    password = hashlib.sha512(password).hexdigest()
-    user = User.query.filter_by(username=username, password=password).first()
-    if user:
-        return True
-    else:
-        return False
+
+def valid_password(username, password):
+    return True if User.query.filter_by(username=username,
+                                        password=hashlib.sha512(password).hexdigest()).first() else False
+
 
 def user_is_login(f):
     """
@@ -48,7 +42,8 @@ def bucketlist_exist(f):
         bucketlist_id = kwargs.get('id')
         token = request.headers.get('Token')
         current_user = get_current_user_id(token)
-        bucketlist = BucketList.query.filter_by(id=bucketlist_id, created_by=current_user).first()
+        bucketlist = BucketList.query.filter_by(
+            id=bucketlist_id, created_by=current_user).first()
         try:
             assert bucketlist
         except:
@@ -56,12 +51,14 @@ def bucketlist_exist(f):
         return f(*args, **kwargs)
     return decorated
 
+
 def bucketlist_item_exist(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         bucketlist_id = kwargs.get('id')
         item_id = kwargs.get('item_id')
-        bucketlist_item = BucketListItem.query.filter_by(id=item_id,bucketlist_id=bucketlist_id).first()
+        bucketlist_item = BucketListItem.query.filter_by(
+            id=item_id, bucketlist_id=bucketlist_id).first()
         try:
             assert bucketlist_item
         except:

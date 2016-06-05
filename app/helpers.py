@@ -41,7 +41,23 @@ def get_all_bucketlist_item(bucketlist_id):
     all_bucketlist_item = BucketListItem.query.filter_by(
         bucketlist_id=bucketlist_id).all()
     bucketlist_item_output = [get_single_bucketlist_item(bucketlist_item) for bucketlist_item in all_bucketlist_item]
-    return bucketlist_item_output  
+    return bucketlist_item_output
+
+def update_database():
+    try:
+        db.session.commit()
+        return True
+    except:
+        return False
+
+def delete_model(model):
+    try:
+        db.session.delete(model)
+        db.session.commit()
+        return True
+    except:
+        return False
+
         
 messages = {"username_not_found": {"message": "username does not exist"},
             "password_incorrect": {"message": "Password incorrect"},

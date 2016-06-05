@@ -4,4 +4,4 @@
 *.sqlite
 */*.sqlite
 *.ini
-*/*.pyc
+*/tests/*.pyc

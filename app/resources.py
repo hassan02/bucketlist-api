@@ -53,31 +53,28 @@ class SingleBucketList(Resource):
     @auth.user_is_login
     @auth.bucketlist_exist
     def put(self, id):
-      name = request.form.get("name")
-      bucketlist = BucketList.query.filter_by(id=id).first()
-      token = request.headers.get('Token')
-      current_user = get_current_user_id(token)
-      check_bucketlist_name = BucketList.query.filter_by(
-          name=name, created_by=current_user).first()
-      if not check_bucketlist_name:
-          try:
+        name = request.form.get("name")
+        bucketlist = BucketList.query.filter_by(id=id).first()
+        token = request.headers.get('Token')
+        current_user = get_current_user_id(token)
+        check_bucketlist_name = BucketList.query.filter_by(
+            name=name, created_by=current_user).first()
+        if not check_bucketlist_name:
             bucketlist.name = name
-            db.session.commit()
-            return messages["bucketlist_updated"], 200
-          except:
-            return messages["bucketlist_not_updated"], 400
-      else:
-        return messages["bucketlist_exist"], 406
+            if update_database():
+               return messages["bucketlist_updated"], 200
+            else:
+                return messages["bucketlist_not_updated"], 400
+        else:
+            return messages["bucketlist_exist"], 406
 
     @auth.user_is_login
     @auth.bucketlist_exist
     def delete(self, id):
-        try:          
-            bucketlist = BucketList.query.filter_by(id=id).first()
-            db.session.delete(bucketlist)
-            db.session.commit()
+        bucketlist = BucketList.query.filter_by(id=id).first()
+        if delete_model(bucketlist):
             return messages["bucketlist_deleted"], 204
-        except:
+        else:
             return messages["bucketlist_not_deleted"], 400
 
 
@@ -170,12 +167,11 @@ class SingleBucketListItem(Resource):
         check_bucketlist_item_details = BucketListItem.query.filter_by(
           name=name, id=item_id, bucketlist_id=id, done=done).first()
         if not check_bucketlist_item_details:
-            try:
-                bucketlist_item.name = name
-                bucketlist_item.done = done
-                db.session.commit()
+            bucketlist_item.name = name
+            bucketlist_item.done = done
+            if update_database():
                 return messages["bucketlist_item_updated"], 200
-            except:
+            else:
                 return messages["bucketlist_item_not_updated"], 400
         else:
             return messages["bucketlist_item_exist"], 400
@@ -185,10 +181,8 @@ class SingleBucketListItem(Resource):
     @auth.bucketlist_item_exist
     def delete(self, id, item_id):
         bucketlist_item = BucketListItem.query.filter_by(id=item_id,bucketlist_id=id).first()
-        try:
-            db.session.delete(bucketlist_item)
-            db.session.commit()
+        if delete_model(bucketlist_item):
             return messages["bucketlist_item_deleted"], 204
-        except:
+        else:
             return messages["bucketlist_item_not_deleted"], 400
 
