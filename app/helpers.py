@@ -85,9 +85,4 @@ messages = {"username_not_found": {"message": "username does not exist"},
              "bucketlist_item_not_deleted": {"message": "Unable to delete bucketlist item"},
               "bucketlist_item_deleted": {"message": "Bucketlist item deleted"},
               "bucketlist_item_updated": {"message": "Bucketlist item updated"},
-              "resource_not_found": "Error: Cannot locate requested item or resource"
-            
-            
-
-
-}
+              "resource_not_found": "Error: Cannot locate requested item or resource"}

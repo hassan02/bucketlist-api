@@ -14,10 +14,10 @@ class Base(db.Model):
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime,  default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(
+    ), onupdate=db.func.current_timestamp())
 
-    
 
 class User(Base):
     """User model that maps to user table.
@@ -34,6 +34,7 @@ class User(Base):
         self.username = username
         self.password = hashlib.sha512(password).hexdigest()
 
+
 class BucketList(Base):
     """Maps to the bucket_list table.
     """
@@ -48,6 +49,7 @@ class BucketList(Base):
         """
         self.name = name
         self.created_by = created_by
+
 
 class BucketListItem(Base):
     """Maps to the bucket_list_item table.

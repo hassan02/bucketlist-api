@@ -4,7 +4,7 @@ import os
 import sqlite3
 import unittest
 
-from app.models import SQLAlchemy, User, BucketList, BucketListItem
+from app.models import db, SQLAlchemy, User, BucketList, BucketListItem
 from app import app
 from app.helpers import *
 from helpers import *
@@ -231,8 +231,9 @@ class TestBucketList(unittest.TestCase):
     def test_delete_non_existing_bucketlist_item(self):
         self.create_bucketlist_item()
         bucketlist_item_request = self.app.delete(
-            "/api/v1/bucketlists/20/items/1000", headers={"Token": self.token})
-        self.assertEqual(bucketlist_item_request.status_code, 400)
+            "/api/v1/bucketlists/{}/items/1000".format(self.bucketlist_item.id), headers={"Token": self.token})
+        self.assertEqual(bucketlist_item_request.status_code, 400)    
+
         
 
 if __name__ == '__main__':
