@@ -12,7 +12,3 @@ def setupDatabase():
     db_cursor.execute('DELETE FROM bucket_list_item')
     db_conn.commit()
     db_conn.close()
-
-def removeDbFile():
-    if os.path.exists(database_name):
-      os.remove(database_name)
