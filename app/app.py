@@ -6,7 +6,7 @@ from .resources import *
 
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_object('config.DevelopmentConfig')
 app.config["JSON_SORT_KEYS"] = False
 
 api = Api(app)

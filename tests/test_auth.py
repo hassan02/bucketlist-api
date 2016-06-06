@@ -12,7 +12,7 @@ class TestLoginRegister(unittest.TestCase):
     def setUp(self):
         # Clear entry in the database
         setupDatabase()
-        app.config.from_object('config_test')
+        app.config.from_object('config.TestingConfig')
         self.app = app.test_client()
 
     def register_user(self):

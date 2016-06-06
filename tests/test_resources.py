@@ -14,7 +14,7 @@ class TestBucketList(unittest.TestCase):
 
     def setUp(self):
         setupDatabase()
-        app.config.from_object('config_test')
+        app.config.from_object('config.TestingConfig')
         self.app = app.test_client()
         self.user_data = {'username': 'test_user', 'password': 'test_password'}
 

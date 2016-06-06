@@ -6,7 +6,7 @@ from app.app import app
 class TestErrors(unittest.TestCase):
 
   def setUp(self):
-    app.config.from_object('config_test')
+    app.config.from_object('config.TestingConfig')
     self.app = app.test_client()
 
   def test_invalid_resource(self):
