@@ -1,7 +1,10 @@
 *flaskapi_venv
 *.pyc
+*/*.pyc
 *migrations
 *.sqlite
 */*.sqlite
 *.ini
 */tests/*.pyc
+*.coverage
+*.coveragerc
