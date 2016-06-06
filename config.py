@@ -18,9 +18,3 @@ class DevelopmentConfig(Config):
     
 class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASEDIR, 'tests/bucketlist_test.sqlite')
-
-config = {
-    "development": "bookshelf.config.DevelopmentConfig",
-    "testing": "bookshelf.config.TestingConfig",
-    "default": "bookshelf.config.DevelopmentConfig"
-}
