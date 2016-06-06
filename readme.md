@@ -14,9 +14,9 @@ This is a Python Checkpoint2 project for D0B fellows in Andela. It's a flask app
 ```pip install -r requirements.txt```
 
 3. Running the app
-* Navigate to the project directory
-* Manage migrations by running `python manage.py db migrate` and 'python manage.py upgrade' to create necessary tables needed to get your app running.
-* Run ```python server.py``` from the terminal to run the app
+- Navigate to the project directory
+- Manage migrations by running `python manage.py db migrate` and 'python manage.py upgrade' to create necessary tables needed to get your app running.
+- Run ```python server.py``` from the terminal to run the app
 
 ## Usage
 The app can be used with Postman or from the command line using the curl command
