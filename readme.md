@@ -7,16 +7,16 @@
 This is a Python Checkpoint2 project for D0B fellows in Andela. It's a flask application designed to manage bucketlists. According to Merriam-Webster Dictionary, a Bucket List is a list of things that one has not done before but wants to do before dying.
 
 ## Installation
-* Clone the repo
+1. Clone the repo
 `git clone https://github.com/andela-hoyeboade/buckelist-api.git/` and navigate to the project directory
 
-* Install dependencies
+2. Install dependencies
 ```pip install -r requirements.txt```
 
-* Running the app
-1. Navigate to the project directory
-2. Manage migrations by running `python manage.py db migrate` and 'python manage.py upgrade' to create necessary tables needed to get your app running.
-3. Run ```python server.py``` from the terminal to run the app
+3. Running the app
+* Navigate to the project directory
+* Manage migrations by running `python manage.py db migrate` and 'python manage.py upgrade' to create necessary tables needed to get your app running.
+* Run ```python server.py``` from the terminal to run the app
 
 ## Usage
 The app can be used with Postman or from the command line using the curl command
