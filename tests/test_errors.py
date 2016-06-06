@@ -1,9 +1,6 @@
-import hashlib
-import os
-import sqlite3
 import unittest
 
-from app import app
+from app.app import app
 
 
 class TestErrors(unittest.TestCase):
