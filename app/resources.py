@@ -79,11 +79,13 @@ class AllBucketLists(Resource):
     @auth.user_is_login
     def get(self):
         limit = request.args.get("limit", 20)
+        limit = 100 if int(limit) > 100 else limit
         search_by = request.args.get("q", "")
+        page = request.args.get("page", 1)
         token = request.headers.get('Token')
         user_id = get_current_user_id(token)
         all_bucketlist = BucketList.query.filter_by(
-            created_by=user_id).filter(BucketList.name.like("%{}%".format(search_by))).all()
+            created_by=user_id).filter(BucketList.name.like("%{}%".format(search_by))).all() #.paginate(page, limit, True)
         if all_bucketlist:
             bucketlist_output = [get_bucketlist(
                 bucketlist) for bucketlist in all_bucketlist]
@@ -152,8 +154,10 @@ class SingleBucketListItem(Resource):
     def get(self, id, item_id):
         bucketlist_item = BucketListItem.query.filter_by(
             id=item_id, bucketlist_id=id).first()
-        return jsonify({"items": get_single_bucketlist_item(bucketlist_item)}) \
-            if bucketlist_item else messages["no_bucketlist_item"], 200
+        if bucketlist_item:
+            return jsonify({"items": get_single_bucketlist_item(bucketlist_item)})
+        else:
+            return messages["no_bucketlist_item"], 200
 
     @auth.user_is_login
     @auth.bucketlist_exist

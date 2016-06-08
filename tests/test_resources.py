@@ -20,10 +20,10 @@ class TestBucketList(unittest.TestCase):
 
     def login(self):
         self.register_request = self.app.post(
-            '/auth/register', data=self.user_data)
+            '/api/v1/auth/register', data=self.user_data)
         self.assertEqual(self.register_request.status_code, 201)
         self.login_request = self.app.post(
-            '/auth/login', data=self.user_data)
+            '/api/v1/auth/login', data=self.user_data)
         self.assertEqual(self.login_request.status_code, 200)
         result = json.loads(self.login_request.data)
         self.token = result["token"]
