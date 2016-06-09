@@ -7,8 +7,8 @@ from .models import User, BucketListItem, db
 
 
 def get_current_user_id(token):
-    """Returns current user_id based on the token supplied
-    """
+    '''Returns current user_id based on the token supplied
+    '''
     try:
         secret_key = current_app.config.get('SECRET_KEY')
         decoded = jwt.decode(token, secret_key)
@@ -17,8 +17,8 @@ def get_current_user_id(token):
         abort(401, message='Cannot authenticate user')
 
 def get_bucketlist(bucketlist):
-    """Returns the result of getting a single bucketlist
-    """
+    '''Returns the result of getting a single bucketlist
+    '''
     return {'id': bucketlist.id,
             'name': bucketlist.name,
             'items': get_all_bucketlist_item(bucketlist.id),
@@ -27,8 +27,8 @@ def get_bucketlist(bucketlist):
             'created_by': bucketlist.created_by}
 
 def get_single_bucketlist_item(bucketlist_item):
-    """Returns the result of getting a single bucketlist item
-    """
+    '''Returns the result of getting a single bucketlist item
+    '''
     return {'id': bucketlist_item.id,
             'name': bucketlist_item.name,
             'date_created': bucketlist_item.date_created,
@@ -36,18 +36,18 @@ def get_single_bucketlist_item(bucketlist_item):
             'done': bucketlist_item.done}
 
 def get_all_bucketlist_item(bucketlist_id):
-    """Returns the result of getting all bucketlist items
-    """
+    '''Returns the result of getting all bucketlist items
+    '''
     all_bucketlist_item = BucketListItem.query.filter_by(
         bucketlist_id=bucketlist_id).all()
     bucketlist_item_output = [get_single_bucketlist_item(bucketlist_item) for bucketlist_item in all_bucketlist_item]
     return bucketlist_item_output
 
 def update_database():
-    """
+    '''
     Updates and commit updated changes to the database
     Returns True if done successfully and False if otherwise
-    """
+    '''
     try:
         db.session.commit()
         return True
@@ -55,10 +55,10 @@ def update_database():
         return False
 
 def delete_model(model):
-    """
+    '''
     Delete the given model from the database
     Returns True if done successfully and False if otherwise
-    """
+    '''
     try:
         db.session.delete(model)
         db.session.commit()
@@ -67,10 +67,10 @@ def delete_model(model):
         return False
 
 def save_model(model):
-    """
+    '''
     Add a new model to the database
     Returns True if done successfully and False if otherwise
-    """
+    '''
     try:
         db.session.add(model)
         db.session.commit()
@@ -78,7 +78,7 @@ def save_model(model):
     except:
         return False
 
-        
+
 messages = {'username_not_found': {'message': 'username does not exist'},
             'password_incorrect': {'message': 'Password incorrect'},
             'authentication_failed': {'message': 'Authentication Failed. Please try again'},
