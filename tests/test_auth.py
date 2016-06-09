@@ -17,18 +17,18 @@ class TestLoginRegister(unittest.TestCase):
 
     def register_user(self):
         test_data = {'username': 'test_user', 'password': 'test_password'}
-        self.register_request = self.app.post('/api/v1/auth/register', data=test_data)
+        self.register_response = self.app.post('/api/v1/auth/register', data=test_data)
 
     def login_with_invalid_details(self):
         self.register_user()
         test_data = {'username': 'andela', 'password': 'andela'}
-        self.login_request = self.app.post('/api/v1/auth/login', data=test_data)
+        self.login_response = self.app.post('/api/v1/auth/login', data=test_data)
 
     def test_register_user(self):
         self.register_user()
         user = User.query.filter_by(username='test_user', password=hashlib.sha512(
             'test_password').hexdigest()).first()
-        self.assertEqual(self.register_request.status_code, 201)
+        self.assertEqual(self.register_response.status_code, 201)
         self.assertIsNotNone(user)
         self.assertEqual(user.username, 'test_user')
         self.assertEqual(user.password, hashlib.sha512(
@@ -36,27 +36,27 @@ class TestLoginRegister(unittest.TestCase):
 
     def test_valid_user_login(self):
         self.register_user()
-        self.login_request = self.app.post(
+        self.login_response = self.app.post(
             '/api/v1/auth/login', data={'username': 'test_user', 'password': 'test_password'})
-        self.assertEqual(self.login_request.status_code, 200)
+        self.assertEqual(self.login_response.status_code, 200)
 
     def test_login_with_invalid_username(self):
         self.register_user()
-        self.login_request = self.app.post(
+        self.login_response = self.app.post(
             '/api/v1/auth/login', data={'username': 'andela', 'password': 'test_password'})
-        self.assertEqual(self.login_request.status_code, 406)
+        self.assertEqual(self.login_response.status_code, 406)
 
     def test_login_with_invalid_password(self):
         self.register_user()
-        self.login_request = self.app.post(
+        self.login_response = self.app.post(
             '/api/v1/auth/login', data={'username': 'test_user', 'password': 'andela'})
-        self.assertEqual(self.login_request.status_code, 406)
+        self.assertEqual(self.login_response.status_code, 406)
 
     def test_login_with_blank_details(self):
         self.register_user()
-        self.login_request = self.app.post(
+        self.login_response = self.app.post(
             '/api/v1/auth/login', data={'username': '', 'password': 'andela'})
-        self.assertEqual(self.login_request.status_code, 406)
+        self.assertEqual(self.login_response.status_code, 406)
 
     def test_register_with_existing_username(self):
       self.register_user()
@@ -64,8 +64,8 @@ class TestLoginRegister(unittest.TestCase):
       self.assertEqual(self.register_another_user.status_code, 406)
 
     def test_register_with_blank_details(self):
-      self.register_request = self.app.post('/api/v1/auth/register', data={'username': '', 'password': 'andela'})
-      self.assertEqual(self.register_request.status_code, 406)
+      self.register_response = self.app.post('/api/v1/auth/register', data={'username': '', 'password': 'andela'})
+      self.assertEqual(self.register_response.status_code, 406)
 
 
 
