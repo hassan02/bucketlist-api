@@ -16,7 +16,7 @@ class LoginUser(Resource):
     Methods:
         POST
     '''
-    
+
     def post(self):
         '''
         Authenticates a user.
@@ -220,7 +220,7 @@ class AllBucketListItems(Resource):
         Header:
             Token: Authentication Token for the User (required)
         Returns:
-            json: message indicating bucketlist has been created or not
+            json: message indicating bucketlist item has been created or not
         '''
         name = request.form.get('name')
         bucketlist_item = BucketListItem.query.filter_by(
@@ -250,7 +250,7 @@ class AllBucketListItems(Resource):
         Header:
             Token: Authentication Token for the User (required)
         Returns:
-            json: message indicating bucketlist has been created or not
+            json: All items in the bucketlist and their content
         '''
         all_bucketlist_item = BucketListItem.query.filter_by(
             bucketlist_id=id).all()
@@ -268,7 +268,9 @@ class SingleBucketListItem(Resource):
     URL:
         /api/v1/bucketlists/<id>/items/<item_id>
     Args:
-        id: The id of the bucketlist item to be retrieved
+        item_id: The id of the bucketlist item to be retrieved (required)
+        id: THe id of the bucketlist whose item is being retrieved
+
     Methods:
         GET, PUT, DELETE
     '''
@@ -277,6 +279,18 @@ class SingleBucketListItem(Resource):
     @auth.bucketlist_exist
     @auth.bucketlist_item_exist
     def get(self, id, item_id):
+        '''
+        Get a single bucketlistitem given the item_id and the bucketlist_id.
+        URL:
+            /api/v1/bucketlists/<id>/items/<item_id>
+        Args:
+            item_id: The id of the bucketlist item to be retrieved (required)
+            id: THe id of the bucketlist whose item is being retrieved
+        Header:
+            Token: Authentication Token for the User (required)
+        Returns:
+            json: bucketlist item and its content
+        '''
         bucketlist_item = BucketListItem.query.filter_by(
             id=item_id, bucketlist_id=id).first()
         if bucketlist_item:
@@ -288,6 +302,21 @@ class SingleBucketListItem(Resource):
     @auth.bucketlist_exist
     @auth.bucketlist_item_exist
     def put(self, id, item_id):
+        '''
+        Updates a single bucketlistitem given the item_id and the bucketlist_id.
+        URL:
+            /api/v1/bucketlists/<id>/items/<item_id>
+        Args:
+            item_id: The id of the bucketlist item to be retrieved (required)
+            id: THe id of the bucketlist whose item is being retrieved
+        Parameters:
+            name: The name for the bucketlist item (optional)
+            done: The status of the bucketlist item (optional)
+        Header:
+            Token: Authentication Token for the User (required)
+        Returns:
+            json: message indicating bucketlist_item has been updated or not
+        '''
         bucketlist_item = BucketListItem.query.filter_by(
             id=item_id, bucketlist_id=id).first()
         name = request.form.get('name')
@@ -307,6 +336,18 @@ class SingleBucketListItem(Resource):
     @auth.bucketlist_exist
     @auth.bucketlist_item_exist
     def delete(self, id, item_id):
+        '''
+        Deletes a single bucketlistitem given the item_id and the bucketlist_id.
+        URL:
+            /api/v1/bucketlists/<id>/items/<item_id>
+        Args:
+            item_id: The id of the bucketlist item to be retrieved (required)
+            id: THe id of the bucketlist whose item is being retrieved
+        Header:
+            Token: Authentication Token for the User (required)
+        Returns:
+            json: message indicating bucketlist_item has been deleted or not
+        '''
         bucketlist_item = BucketListItem.query.filter_by(
             id=item_id, bucketlist_id=id).first()
         return (messages['bucketlist_item_deleted'], 204) \
