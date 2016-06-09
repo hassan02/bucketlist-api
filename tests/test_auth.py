@@ -30,9 +30,9 @@ class TestLoginRegister(unittest.TestCase):
             'test_password').hexdigest()).first()
         self.assertEqual(self.register_request.status_code, 201)
         self.assertIsNotNone(user)
-        self.assertEqual(user.username, "test_user")
+        self.assertEqual(user.username, 'test_user')
         self.assertEqual(user.password, hashlib.sha512(
-            "test_password").hexdigest())
+            'test_password').hexdigest())
 
     def test_valid_user_login(self):
         self.register_user()

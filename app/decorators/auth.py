@@ -22,8 +22,8 @@ def valid_password(username, password):
 
 
 def user_is_login(f):
-    """
-    """
+    '''
+    '''
     @wraps(f)
     def decorated(*args, **kwargs):
         try:
@@ -31,7 +31,7 @@ def user_is_login(f):
             secret_key = current_app.config.get('SECRET_KEY')
             decoded = jwt.decode(token, secret_key)
         except:
-            abort(401, message="Cannot authenticate user")
+            abort(401, message='Cannot authenticate user')
         return f(*args, **kwargs)
     return decorated
 
@@ -47,7 +47,7 @@ def bucketlist_exist(f):
         try:
             assert bucketlist
         except:
-            abort(400, message="Bucketlist does not exist")
+            abort(400, message='Bucketlist does not exist')
         return f(*args, **kwargs)
     return decorated
 
@@ -62,6 +62,6 @@ def bucketlist_item_exist(f):
         try:
             assert bucketlist_item
         except:
-            abort(400, message="Buckelist Item does not exist")
+            abort(400, message='Buckelist Item does not exist')
         return f(*args, **kwargs)
     return decorated

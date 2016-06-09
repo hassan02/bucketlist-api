@@ -1,10 +1,10 @@
-"""empty message
+'''empty message
 
 Revision ID: 162c0569049c
 Revises: 90b724f11869
 Create Date: 2016-05-21 15:57:56.149000
 
-"""
+'''
 
 # revision identifiers, used by Alembic.
 revision = '162c0569049c'

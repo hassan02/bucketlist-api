@@ -51,12 +51,12 @@ def delete_model(model):
         return False
 
 def save_model(model):      
-        try:
-            db.session.add(model)
-            db.session.commit()
-            return True
-        except:
-            return False
+    try:
+        db.session.add(model)
+        db.session.commit()
+        return True
+    except:
+        return False
 
         
 messages = {'username_not_found': {'message': 'username does not exist'},
