@@ -69,7 +69,7 @@ class RegisterUser(Resource):
 
 
 class SingleBucketList(Resource):
-     '''
+    '''
     Manage responses to single bucketlists requests.
     URL:
         /api/v1/bucketlists/<id>/
@@ -132,7 +132,7 @@ class SingleBucketList(Resource):
 
 
 class AllBucketLists(Resource):
-     '''
+    '''
     Manage responses to bucketlists requests by a user.
     URL:
         /api/v1/bucketlists/
@@ -157,14 +157,28 @@ class AllBucketLists(Resource):
         page = request.args.get('page', 1)
         token = request.headers.get('Token')
         user_id = get_current_user_id(token)
+        offset = (page * limit) - limit
+        next_page = page + 1
+        prev_page = page - 1 if page > 1 else 1
+
         all_bucketlist = BucketList.query.filter_by(
             created_by=user_id).filter(BucketList.name.like('%{}%'.format(search_by))).all() #.paginate(page, limit, True)
+        all_bucketlist = all_bucketlist[offset:(limit + offset)]
         if all_bucketlist:
             bucketlist_output = [get_bucketlist(
                 bucketlist) for bucketlist in all_bucketlist]
-            return jsonify({'data': bucketlist_output})
+            result = jsonify({'data': bucketlist_output, 'page': {}})
         else:
             return messages['no_bucketlist'], 200
+
+        if (limit + offset) < len(all_bucketlist):
+            result['page']['next'] = "/api/v1.0/bucketlists?limit=" + \
+                str(limit) + "&page=" + str(next_page)
+
+        if offset:
+            result['page']['prev'] = "/api/v1.0/bucketlists?limit=" + \
+                str(limit) + "&page=" + str(prev_page)
+        return result
 
     @auth.user_is_login
     def post(self):
@@ -327,7 +341,7 @@ class SingleBucketListItem(Resource):
         if not check_bucketlist_item_details:
             bucketlist_item.name = name
             bucketlist_item.done = done
-            return (messages['bucketlist_item_updated'], 200) if update_database()
+            return (messages['bucketlist_item_updated'], 200) if update_database() \
                 else (messages['bucketlist_item_not_updated'], 400)
         else:
             return messages['bucketlist_item_exist'], 400
