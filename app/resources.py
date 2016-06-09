@@ -157,28 +157,15 @@ class AllBucketLists(Resource):
         page = request.args.get('page', 1)
         token = request.headers.get('Token')
         user_id = get_current_user_id(token)
-        offset = (page * limit) - limit
-        next_page = page + 1
-        prev_page = page - 1 if page > 1 else 1
-
+        
         all_bucketlist = BucketList.query.filter_by(
             created_by=user_id).filter(BucketList.name.like('%{}%'.format(search_by))).all() #.paginate(page, limit, True)
-        all_bucketlist = all_bucketlist[offset:(limit + offset)]
         if all_bucketlist:
             bucketlist_output = [get_bucketlist(
                 bucketlist) for bucketlist in all_bucketlist]
-            result = jsonify({'data': bucketlist_output, 'page': {}})
+            return jsonify({'data': bucketlist_output})
         else:
             return messages['no_bucketlist'], 200
-
-        if (limit + offset) < len(all_bucketlist):
-            result['page']['next'] = "/api/v1.0/bucketlists?limit=" + \
-                str(limit) + "&page=" + str(next_page)
-
-        if offset:
-            result['page']['prev'] = "/api/v1.0/bucketlists?limit=" + \
-                str(limit) + "&page=" + str(prev_page)
-        return result
 
     @auth.user_is_login
     def post(self):
