@@ -13,17 +13,23 @@ import hashlib
 
 
 def valid_username(username):
+    """
+    Returns True if username exist in the database or False if it doesn't
+    """
     return True if User.query.filter_by(username=username).first() else False
 
 
 def valid_password(username, password):
+    """Returns True if username and password exist and False if otherwise
+    """
     return True if User.query.filter_by(username=username,
                                         password=hashlib.sha512(password).hexdigest()).first() else False
 
 
 def user_is_login(f):
-    '''
-    '''
+    """
+    Authenticates that user is login by verifying the token supplied
+    """
     @wraps(f)
     def decorated(*args, **kwargs):
         try:
@@ -37,6 +43,9 @@ def user_is_login(f):
 
 
 def bucketlist_exist(f):
+    """
+    Authenticates that Bucket List exists for the current User
+    """
     @wraps(f)
     def decorated(*args, **kwargs):
         bucketlist_id = kwargs.get('id')
@@ -53,6 +62,9 @@ def bucketlist_exist(f):
 
 
 def bucketlist_item_exist(f):
+    """
+    Authenticates that Item exist for a Bucket List
+    """
     @wraps(f)
     def decorated(*args, **kwargs):
         bucketlist_id = kwargs.get('id')
