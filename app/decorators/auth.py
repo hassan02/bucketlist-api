@@ -37,7 +37,7 @@ def user_is_login(f):
             secret_key = current_app.config.get('SECRET_KEY')
             decoded = jwt.decode(token, secret_key)
         except:
-            abort(401, message='Cannot authenticate user')
+            abort(401, message='Cannot authenticate user. Invalid Token')
         return f(*args, **kwargs)
     return decorated
 
