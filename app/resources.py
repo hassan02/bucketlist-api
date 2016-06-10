@@ -1,11 +1,12 @@
 import json
 
-from flask_restful import Resource
 from flask import jsonify, request
+from flask.ext.restful import Resource, marshal
 
 from .decorators import auth
 from .helpers import *
 from .models import db, User, BucketList, BucketListItem
+from .serializers import *
 
 
 class LoginUser(Resource):
@@ -83,7 +84,7 @@ class SingleBucketList(Resource):
         '''
         Retrieve the bucketlist using an id.
         Args:
-            id: The id of the bucketlist to be retrieved
+            id: The id of the bucketlist to be retrieved (required)
         Returns:
             json: The bucketlist with its content
         '''
@@ -98,7 +99,7 @@ class SingleBucketList(Resource):
         '''
         Updates the bucketlist using an id.
         Args:
-            id: The id of the bucketlist to be retrieved
+            id: The id of the bucketlist to be updated (required)
         Returns:
             json: message indicating Bucketlist has been updated
         '''
@@ -121,7 +122,7 @@ class SingleBucketList(Resource):
         '''
         Delete the bucketlist using an id.
         Args:
-            id: The id of the bucketlist to be retrieved
+            id: The id of the bucketlist to be deleted (required)
         Returns:
             json: message indicating Bucketlist has been deleted
         '''
@@ -146,7 +147,7 @@ class AllBucketLists(Resource):
         Retrieve all bucketlists for a particular user.
         Args:
             q: Searches bucketlists by name (optional)
-            limit: Limit number of retrieved results  (optional)
+            limit: Limit number of retrieved results per page (optional)
             page: Number of pages to contain retrieved results (optional)
         Returns:
             json: All bucketlists with their content
@@ -157,15 +158,19 @@ class AllBucketLists(Resource):
         page = request.args.get('page', 1)
         token = request.headers.get('Token')
         user_id = get_current_user_id(token)
-        
+
         all_bucketlist = BucketList.query.filter_by(
-            created_by=user_id).filter(BucketList.name.like('%{}%'.format(search_by))).all() #.paginate(page, limit, True)
+            created_by=user_id).filter(BucketList.name.like('%{}%'.format(search_by))).all()
+        #all_bucketlist = all_bucketlist.paginate(page=page, per_page=limit, error_out=False)
         if all_bucketlist:
             bucketlist_output = [get_bucketlist(
                 bucketlist) for bucketlist in all_bucketlist]
-            return jsonify({'data': bucketlist_output})
+            result = jsonify({'data': bucketlist_output,
+                              'prev':'prev'})
         else:
-            return messages['no_bucketlist'], 200
+            result = messages['no_bucketlist']
+        return result
+
 
     @auth.user_is_login
     def post(self):
@@ -173,9 +178,9 @@ class AllBucketLists(Resource):
         Create a new bucketlist for a particular user.
         Args:
             Params:
-                name: Name for the bucketlist
+                name: Name for the bucketlist (required)
             Header:
-                Token: Authentication Token for the User
+                Token: Authentication Token for the User (required)
         Returns:
             json: message indicating bucketlist has been created or not
         '''
@@ -203,8 +208,6 @@ class AllBucketListItems(Resource):
     Manage responses to bucketlistitem requests by a user.
     URL:
         /api/v1/bucketlists/<id>/items/
-    Args:
-        id: The id of the bucketlist whose items is to be retrieved
     Methods:
         GET, POST
     '''
@@ -251,7 +254,7 @@ class AllBucketListItems(Resource):
         Header:
             Token: Authentication Token for the User (required)
         Returns:
-            json: All items in the bucketlist and their content
+            json: All items in the specified bucketlist and their content
         '''
         all_bucketlist_item = BucketListItem.query.filter_by(
             bucketlist_id=id).all()
@@ -268,10 +271,6 @@ class SingleBucketListItem(Resource):
     Manage responses to single bucketlistitem requests by a user.
     URL:
         /api/v1/bucketlists/<id>/items/<item_id>
-    Args:
-        item_id: The id of the bucketlist item to be retrieved (required)
-        id: THe id of the bucketlist whose item is being retrieved
-
     Methods:
         GET, PUT, DELETE
     '''
@@ -286,7 +285,7 @@ class SingleBucketListItem(Resource):
             /api/v1/bucketlists/<id>/items/<item_id>
         Args:
             item_id: The id of the bucketlist item to be retrieved (required)
-            id: THe id of the bucketlist whose item is being retrieved
+            id: The id of the bucketlist whose item is being retrieved
         Header:
             Token: Authentication Token for the User (required)
         Returns:
@@ -308,8 +307,8 @@ class SingleBucketListItem(Resource):
         URL:
             /api/v1/bucketlists/<id>/items/<item_id>
         Args:
-            item_id: The id of the bucketlist item to be retrieved (required)
-            id: THe id of the bucketlist whose item is being retrieved
+            item_id: The id of the bucketlist item to be updated (required)
+            id: The id of the bucketlist whose item is being updated (required)
         Parameters:
             name: The name for the bucketlist item (optional)
             done: The status of the bucketlist item (optional)
@@ -342,8 +341,8 @@ class SingleBucketListItem(Resource):
         URL:
             /api/v1/bucketlists/<id>/items/<item_id>
         Args:
-            item_id: The id of the bucketlist item to be retrieved (required)
-            id: THe id of the bucketlist whose item is being retrieved
+            item_id: The id of the bucketlist item to be deleted (required)
+            id: The id of the bucketlist whose item is being deleted (required)
         Header:
             Token: Authentication Token for the User (required)
         Returns:
