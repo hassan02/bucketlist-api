@@ -153,21 +153,22 @@ class AllBucketLists(Resource):
         '''
         limit = request.args.get('limit', 20)
         limit = 100 if int(limit) > 100 else limit
+        limit = int(limit)
         search_by = request.args.get('q', '')
-        page = request.args.get('page', 1)
+        page = int(request.args.get('page', 1))
         token = request.headers.get('Token')
         user_id = get_current_user_id(token)
-
+        start_at = (page * limit) - limit;
+        end_at = (page * limit);
         all_bucketlist = BucketList.query.filter_by(
-            created_by=user_id).filter(BucketList.name.like('%{}%'.format(search_by))).all()
+            created_by=user_id).filter(BucketList.name.like('%{}%'.format(search_by))).all()[start_at:end_at]
         #all_bucketlist = all_bucketlist.paginate(page=page, per_page=limit, error_out=False)
         if all_bucketlist:
             bucketlist_output = [get_bucketlist(
                 bucketlist) for bucketlist in all_bucketlist]
-            result = jsonify({'data': bucketlist_output,
-                              'prev':'prev'})
+            result = jsonify({'data': bucketlist_output,})
         else:
-            result = messages['no_bucketlist']
+            result = messages['no_bucketlist'], 200
         return result
 
 
