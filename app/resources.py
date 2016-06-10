@@ -219,7 +219,7 @@ class AllBucketListItems(Resource):
         Args:
             id: The id of the bucketlist which an item is added to
         Parameters:
-            name: Name for the bucketlist (required)
+            name: Name for the bucketlist item (required)
         Header:
             Token: Authentication Token for the User (required)
         Returns:
