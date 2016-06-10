@@ -6,7 +6,6 @@ from flask.ext.restful import Resource, marshal
 from .decorators import auth
 from .helpers import *
 from .models import db, User, BucketList, BucketListItem
-from .serializers import *
 
 
 class LoginUser(Resource):
