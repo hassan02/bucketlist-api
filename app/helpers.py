@@ -14,7 +14,7 @@ def get_current_user_id(token):
         decoded = jwt.decode(token, secret_key)
         return User.query.filter_by(username=decoded['username']).first().id
     except:
-        abort(401, message='Cannot authenticate user')
+        abort(401, message='Cannot authenticate user. Invalid Token')
 
 def get_bucketlist(bucketlist):
     '''Returns the result of getting a single bucketlist
@@ -40,7 +40,8 @@ def get_all_bucketlist_item(bucketlist_id):
     '''
     all_bucketlist_item = BucketListItem.query.filter_by(
         bucketlist_id=bucketlist_id).all()
-    bucketlist_item_output = [get_single_bucketlist_item(bucketlist_item) for bucketlist_item in all_bucketlist_item]
+    bucketlist_item_output = [get_single_bucketlist_item(bucketlist_item) \
+        for bucketlist_item in all_bucketlist_item]
     return bucketlist_item_output
 
 def update_database():
