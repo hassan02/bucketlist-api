@@ -1,0 +1,5 @@
+languages:
+  python: true
+ratings:
+   paths:
+     - '**.py'
