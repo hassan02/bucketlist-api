@@ -151,7 +151,7 @@ class AllBucketLists(Resource):
         Returns:
             json: All bucketlists with their content
         '''
-        limit = request.args.get('limit', 20)
+        limit = int(request.args.get('limit', 20))
         limit = 100 if int(limit) > 100 else limit
         limit = int(limit)
         search_by = request.args.get('q', '')

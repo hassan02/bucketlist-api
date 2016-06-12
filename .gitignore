@@ -6,5 +6,6 @@
 */*.sqlite
 *.ini
 */tests/*.pyc
+*/app/*.pyc
 *.coverage
 *.coveragerc
