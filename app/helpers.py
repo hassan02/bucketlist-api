@@ -1,4 +1,4 @@
-import jwt
+import jwt, json
 
 from flask import current_app
 from flask_restful import abort
@@ -79,6 +79,10 @@ def save_model(model):
     except:
         return False
 
+def save_resource_msg(data):
+    msg = {'message': 'Saved'}
+    msg.update(data)
+    return msg
 
 messages = {'username_not_found': {'message': 'username does not exist'},
             'password_incorrect': {'message': 'Password incorrect'},
