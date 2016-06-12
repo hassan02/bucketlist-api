@@ -24,6 +24,86 @@ This is a Python Checkpoint2 project for D0B fellows in Andela. It's a flask app
 ## Usage
 The app can be used with Postman or from the command line using the curl command
 
+### Functionality, Endpoints and Accessiblity
+<table>
+<tr>
+<th> Functionality </th>
+<th> Endpoint</th>
+<th> Public Access</th>
+</tr>
+<tr>
+<td>Logs a user in</td>
+<td>POST /auth/login</td>
+<td>True</td>
+</tr>
+<tr>
+ <td>Register a user</td>
+ <td>POST /auth/register</td>
+ <td> True</td>
+</tr>
+
+<tr>
+<td>Create a new bucket list</td>
+<td>POST /bucketlists/ </td>
+<td>False</td>
+</tr>
+
+<tr>
+<td>List all the created bucket lists</td>
+<td>GET /bucketlists/ </td>
+<td>False</td>
+</tr>
+
+<tr>
+<td>Get single bucket list</td>
+<td>GET /bucketlists/{id} </td>
+<td>False</td>
+</tr>
+
+<tr>
+<td>Update this bucket list</td>
+<td>PUT /bucketlists/{id} </td>
+<td>False</td>
+</tr>
+
+<tr>
+<td>Delete this single bucket list</td>
+<td>DELETE /bucketlists/{id} </td>
+<td>False</td>
+</tr>
+
+<tr>
+<td>Get all items in this bucket list</td>
+<td>GET /bucketlists/{id}/items </td>
+<td>False</td>
+</tr>
+
+<tr>
+<td>Create new item in this bucket list</td>
+<td>POST /bucketlists/{id}/items </td>
+<td>False</td>
+</tr>
+
+<tr>
+<td>Get this bucket list item</td>
+<td>GET /bucketlists/{id}/items/{item_id} </td>
+<td>False</td>
+</tr>
+
+<tr>
+<td>Update a bucketlist item </td>
+<td>PUT /bucketlists/{id}/items/{item_id} </td>
+<td>False</td>
+</tr>
+
+<tr>
+<td>Delete this item in this bucket list</td>
+<td>DELETE /bucketlists/{id}/items/{item_id} </td>
+<td>False</td>
+</tr>
+
+</table>
+
 ## Running tests
 1. Navigate to the project direcory
 2. Run nosetests --with-coverage to run test and check coverage
