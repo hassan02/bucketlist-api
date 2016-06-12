@@ -1,14 +1,15 @@
-'''empty message
+"""empty message
 
-Revision ID: a20149dc4aab
-Revises: 162c0569049c
-Create Date: 2016-05-21 16:45:07.779000
+Revision ID: 30572c3dd213
+Revises: None
+Create Date: 2016-06-12 15:05:34.114215
 
-'''
+"""
 
 # revision identifiers, used by Alembic.
-revision = 'a20149dc4aab'
-down_revision = '162c0569049c'
+# revision identifiers, used by Alembic.
+revision = '30572c3dd213'
+down_revision = None
 
 from alembic import op
 import sqlalchemy as sa
@@ -40,12 +41,12 @@ def upgrade():
     sa.Column('date_created', sa.DateTime(), nullable=True),
     sa.Column('date_modified', sa.DateTime(), nullable=True),
     sa.Column('bucketlist_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['bucketlist_id'], ['bucket_list_model.id'], ),
+    sa.ForeignKeyConstraint(['bucketlist_id'], ['bucket_list.id'], ),
     sa.PrimaryKeyConstraint('id'),
     )
 
 
 def downgrade():
-    op.drop_table('users')
+    op.drop_table('user')
     op.drop_table('bucket_list')
     op.drop_table('bucket_list_item')
