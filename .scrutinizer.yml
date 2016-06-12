@@ -1,4 +1,4 @@
 checks:
     python:
         code_rating: true
-        duplicate_code: true
+        duplicate_code: false
