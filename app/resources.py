@@ -256,8 +256,17 @@ class AllBucketListItems(Resource):
         Returns:
             json: All items in the specified bucketlist and their content
         '''
+        limit = int(request.args.get('limit', 20))
+        limit = 100 if int(limit) > 100 else limit
+        limit = int(limit)
+        search_by = request.args.get('q', '')
+        page = int(request.args.get('page', 1))
+        start_at = (page * limit) - limit;
+        end_at = (page * limit);
         all_bucketlist_item = BucketListItem.query.filter_by(
-            bucketlist_id=id).all()
+            bucketlist_id=id).filter(BucketListItem.name.like
+            ('%{}%'.format(search_by))).all()[start_at:end_at]
+
         if all_bucketlist_item:
             bucketlist_item_output = [get_single_bucketlist_item(
                 bucketlist_item) for bucketlist_item in all_bucketlist_item]
