@@ -101,7 +101,6 @@ The app can be used with Postman or from the command line using the curl command
 <td>DELETE /bucketlists/{id}/items/{item_id} </td>
 <td>False</td>
 </tr>
-
 </table>
 
 ## Running tests
