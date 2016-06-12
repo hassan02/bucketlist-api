@@ -218,7 +218,7 @@ class AllBucketListItems(Resource):
         '''
         Create a new bucketlist item for a particular bucketlist.
         Args:
-            id: The id of the bucketlist which an item is added to
+            id: The id of the bucketlist which an item is being added
         Parameters:
             name: Name for the bucketlist item (required)
         Header:
@@ -246,11 +246,9 @@ class AllBucketListItems(Resource):
     @auth.bucketlist_exist
     def get(self, id):
         '''
-        Get all bucketlist items for a particular bucketlist.
+        Get all items for a particular bucketlist.
         Args:
             id: The id of the bucketlist whose items is to be retrieved (required)
-        Parameters:
-            name: Name for the bucketlist (required)
         Header:
             Token: Authentication Token for the User (required)
         Returns:
