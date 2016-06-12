@@ -17,7 +17,6 @@ This is a Python Checkpoint2 project for D0B fellows in Andela. It's a flask app
 ```pip install -r requirements.txt```
 
 4. Run the app
-  * Navigate to the project directory
   * Make migrations by running `python manage.py db upgrade` to create necessary tables needed for the app.
   * Run ```python server.py``` to get the app running
 
