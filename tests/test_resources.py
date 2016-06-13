@@ -47,15 +47,14 @@ class TestBucketList(unittest.TestCase):
 
     def create_bucketlist(self):
         self.login()
-        self.bucketlist_response = self.app.post('/api/v1/bucketlists/',
-                      data={'name': 'BucketList1'},
+        self.app.post('/api/v1/bucketlists/', data={'name': 'BucketList1'},
                       headers={'Token': self.token})
 
     def test_post_bucketlist(self):
         self.create_bucketlist()
         bucketlist = BucketList.query.filter_by(name='BucketList1').first()
         self.assertIsNotNone(bucketlist)
-        
+
 
 
     def test_post_bucketlist_with_existing_name(self):
