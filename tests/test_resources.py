@@ -47,14 +47,18 @@ class TestBucketList(unittest.TestCase):
 
     def create_bucketlist(self):
         self.login()
-        self.app.post('/api/v1/bucketlists/',
+        self.bucketlist_response = self.app.post('/api/v1/bucketlists/',
                       data={'name': 'BucketList1'},
                       headers={'Token': self.token})
 
     def test_post_bucketlist(self):
         self.create_bucketlist()
         bucketlist = BucketList.query.filter_by(name='BucketList1').first()
+        result = json.loads(self.bucketlist_response.data)
         self.assertIsNotNone(bucketlist)
+        self.assertIsNotNone(result)
+
+
 
     def test_post_bucketlist_with_existing_name(self):
         self.create_bucketlist()
@@ -143,7 +147,7 @@ class TestBucketList(unittest.TestCase):
         bucketlist_response = self.app.delete(
             '/api/v1/bucketlists/200', headers={'Token': self.token})
         self.assertEqual(bucketlist_response.status_code, 400)
-        
+
     def test_post_bucketlist_item(self):
         self.create_bucketlist_item()
         self.assertIsNotNone(self.bucketlist_item)
@@ -233,7 +237,7 @@ class TestBucketList(unittest.TestCase):
         bucketlist_item_response = self.app.delete(
             '/api/v1/bucketlists/{}/items/1000'.format(self.bucketlist_item.id), headers={'Token': self.token})
         self.assertEqual(bucketlist_item_response.status_code, 400)
-        
+
 
 if __name__ == '__main__':
     unittest.main()
