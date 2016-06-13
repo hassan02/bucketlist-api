@@ -54,10 +54,8 @@ class TestBucketList(unittest.TestCase):
     def test_post_bucketlist(self):
         self.create_bucketlist()
         bucketlist = BucketList.query.filter_by(name='BucketList1').first()
-        result = json.loads(self.bucketlist_response.data)
         self.assertIsNotNone(bucketlist)
-        self.assertIsNotNone(result)
-
+        
 
 
     def test_post_bucketlist_with_existing_name(self):
