@@ -107,7 +107,7 @@ The app can be used with Postman or from the command line using the curl command
 2. Run nosetests --with-coverage to run test and check coverage
 
 ##Project Demo
-Click <a href='http://www.youtube.com'>here </a> to view the project demo
+Click <a href='https://youtu.be/-Gcau1z1lUU'>here </a> to view the project demo
 
 ## References
 http://blog.miguelgrinberg.com/ <br />
