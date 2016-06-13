@@ -1,7 +1,7 @@
 import json
 
 from flask import jsonify, request
-from flask.ext.restful import Resource, marshal
+from flask.ext.restful import Resource
 
 from .decorators import auth
 from .helpers import *
@@ -103,12 +103,12 @@ class SingleBucketList(Resource):
             json: message indicating Bucketlist has been updated
         '''
         name = request.form.get('name')
-        bucketlist = BucketList.query.filter_by(id=id).first()
         token = request.headers.get('Token')
         current_user = get_current_user_id(token)
         check_bucketlist_name = BucketList.query.filter_by(
             name=name, created_by=current_user).first()
         if not check_bucketlist_name:
+            bucketlist = BucketList.query.filter_by(id=id).first()
             bucketlist.name = name
             return (messages['bucketlist_updated'], 200) if update_database() \
                 else (messages['bucketlist_not_updated'], 400)
@@ -119,7 +119,7 @@ class SingleBucketList(Resource):
     @auth.bucketlist_exist
     def delete(self, id):
         '''
-        Delete the bucketlist using an id.
+        Delete the bucketlist with the specified id.
         Args:
             id: The id of the bucketlist to be deleted (required)
         Returns:
@@ -146,8 +146,8 @@ class AllBucketLists(Resource):
         Retrieve all bucketlists for a particular user.
         Args:
             q: Searches bucketlists by name (optional)
-            limit: Limit number of retrieved results per page (optional)
-            page: Number of pages to contain retrieved results (optional)
+            limit: Limit number of retrieved bucketlists per page (optional)
+            page: Number of pages to contain retrieved bucketlists (optional)
         Returns:
             json: All bucketlists with their content
         '''
@@ -194,11 +194,9 @@ class AllBucketLists(Resource):
                 return messages['bucketlist_exist'], 400
             else:
                 bucketlist = BucketList(name, current_user)
-                return {'message': 'Saved',
-                        'name': name,
-                        'created_by': current_user
-                        } if save_model(bucketlist) \
-                    else messages['bucketlist_not_saved'], 400
+                return (save_resource_msg({'name': name, \
+                    'created_by': current_user }), 200) if save_model(bucketlist) \
+                    else (messages['bucketlist_not_saved'], 400)
         else:
             return messages['no_bucketlist_name'], 400
 
@@ -234,11 +232,9 @@ class AllBucketListItems(Resource):
                 return messages['bucketlist_item_exist'], 400
             else:
                 bucketlist_item = BucketListItem(name=name, bucketlist_id=id)
-                return {'message': 'Saved',
-                        'name': name,
-                        'bucketlist_id': id,
-                        } if save_model(bucketlist_item) \
-                    else messages['bucketlist_item_not_saved'], 400
+                return (save_resource_msg({'name': name, 'bucketlist_id': id,
+                        }), 200) if save_model(bucketlist_item) \
+                    else (messages['bucketlist_item_not_saved'], 400)
         else:
             return messages['no_bucketlist_item_name'], 400
 
@@ -249,6 +245,9 @@ class AllBucketListItems(Resource):
         Get all items for a particular bucketlist.
         Args:
             id: The id of the bucketlist whose items is to be retrieved (required)
+            q: Searches bucketlist items by name (optional)
+            limit: Limit number of retrieved bucketlist items per page (optional)
+            page: Number of pages to contain retrieved bucketlist items (optional)
         Header:
             Token: Authentication Token for the User (required)
         Returns:
@@ -300,10 +299,7 @@ class SingleBucketListItem(Resource):
         '''
         bucketlist_item = BucketListItem.query.filter_by(
             id=item_id, bucketlist_id=id).first()
-        if bucketlist_item:
-            return jsonify({'items': get_single_bucketlist_item(bucketlist_item)})
-        else:
-            return messages['no_bucketlist_item'], 200
+        return jsonify({'items': get_single_bucketlist_item(bucketlist_item)})
 
     @auth.user_is_login
     @auth.bucketlist_exist
