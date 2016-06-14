@@ -207,7 +207,7 @@ class AllBucketListItems(Resource):
     URL:
         /api/v1/bucketlists/<id>/items/
     Methods:
-        GET, POST
+        POST
     '''
 
     @auth.user_is_login
@@ -238,39 +238,6 @@ class AllBucketListItems(Resource):
         else:
             return messages['no_bucketlist_item_name'], 400
 
-    @auth.user_is_login
-    @auth.bucketlist_exist
-    def get(self, id):
-        '''
-        Get all items for a particular bucketlist.
-        Args:
-            id: The id of the bucketlist whose items is to be retrieved (required)
-            q: Searches bucketlist items by name (optional)
-            limit: Limit number of retrieved bucketlist items per page (optional)
-            page: Number of pages to contain retrieved bucketlist items (optional)
-        Header:
-            Token: Authentication Token for the User (required)
-        Returns:
-            json: All items in the specified bucketlist and their content
-        '''
-        limit = int(request.args.get('limit', 20))
-        limit = 100 if int(limit) > 100 else limit
-        limit = int(limit)
-        search_by = request.args.get('q', '')
-        page = int(request.args.get('page', 1))
-        start_at = (page * limit) - limit;
-        end_at = (page * limit);
-        all_bucketlist_item = BucketListItem.query.filter_by(
-            bucketlist_id=id).filter(BucketListItem.name.like
-            ('%{}%'.format(search_by))).all()[start_at:end_at]
-
-        if all_bucketlist_item:
-            bucketlist_item_output = [get_single_bucketlist_item(
-                bucketlist_item) for bucketlist_item in all_bucketlist_item]
-            return jsonify({'items': bucketlist_item_output})
-        else:
-            return messages['no_bucketlist_item'], 200
-
 
 class SingleBucketListItem(Resource):
     '''
@@ -278,29 +245,8 @@ class SingleBucketListItem(Resource):
     URL:
         /api/v1/bucketlists/<id>/items/<item_id>
     Methods:
-        GET, PUT, DELETE
+        PUT, DELETE
     '''
-
-    @auth.user_is_login
-    @auth.bucketlist_exist
-    @auth.bucketlist_item_exist
-    def get(self, id, item_id):
-        '''
-        Get a single bucketlistitem given the item_id and the bucketlist_id.
-        URL:
-            /api/v1/bucketlists/<id>/items/<item_id>
-        Args:
-            item_id: The id of the bucketlist item to be retrieved (required)
-            id: The id of the bucketlist whose item is being retrieved
-        Header:
-            Token: Authentication Token for the User (required)
-        Returns:
-            json: bucketlist item and its content
-        '''
-        bucketlist_item = BucketListItem.query.filter_by(
-            id=item_id, bucketlist_id=id).first()
-        return jsonify({'items': get_single_bucketlist_item(bucketlist_item)})
-
     @auth.user_is_login
     @auth.bucketlist_exist
     @auth.bucketlist_item_exist
