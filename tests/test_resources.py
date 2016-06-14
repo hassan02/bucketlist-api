@@ -149,34 +149,6 @@ class TestBucketList(unittest.TestCase):
         self.create_bucketlist_item()
         self.assertIsNotNone(self.bucketlist_item)
 
-    def test_get_single_bucketlist_item(self):
-        self.create_bucketlist_item()
-        self.assertIsNotNone(self.bucketlist_item)
-        item_id, bucketlist_id = self.bucketlist_item.id, self.bucketlist_item.bucketlist_id
-        self.bucketlist_item_response = self.app.get('/api/v1/bucketlists/{}/items/{}'.format(bucketlist_id, item_id),
-                                                    headers={'Token': self.token})
-        self.assertIsNotNone(self.bucketlist_item_response.data)
-
-    def test_get_empty_bucketlist_item(self):
-        self.create_bucketlist()
-        bucketlist_id = BucketList.query.filter_by(
-            name='BucketList1').first().id
-        bucketlist_item_response = self.app.get('/api/v1/bucketlists/{}/items/'.format(bucketlist_id),
-                                               headers={'Token': self.token})
-        self.assertEqual(bucketlist_item_response.status_code, 200)
-        result = json.loads(bucketlist_item_response.data)
-        self.assertEqual(result['message'],
-                         'Cannot locate any bucketlist items')
-
-    def test_get_bucketlist_item(self):
-        self.create_bucketlist_item()
-        bucketlist_id = BucketList.query.filter_by(
-            name='BucketList1').first().id
-        bucketlist_item_response = self.app.get('/api/v1/bucketlists/{}/items/'.format(bucketlist_id),
-                                               headers={'Token': self.token})
-        self.assertEqual(bucketlist_item_response.status_code, 200)
-        self.assertIsNotNone(bucketlist_item_response)
-
     def test_put_bucketlist_item(self):
         self.create_bucketlist_item()
         item_id, bucketlist_id = self.bucketlist_item.id, self.bucketlist_item.bucketlist_id
