@@ -7,7 +7,7 @@ import unittest
 from app.models import User, BucketList, BucketListItem
 from app.app import app
 from app.helpers import *
-from db_test_helpers import *
+from helpers import *
 
 
 class TestBucketList(unittest.TestCase):
