@@ -23,7 +23,8 @@ def valid_password(username, password):
     """Returns True if username and password exist and False if otherwise
     """
     return True if User.query.filter_by(username=username,
-                                        password=hashlib.sha512(password).hexdigest()).first() else False
+                                        password=hashlib.sha512(password).
+                                        hexdigest()).first() else False
 
 
 def user_is_login(f):
