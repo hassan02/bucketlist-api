@@ -16,14 +16,21 @@ def get_current_user_id(token):
     except:
         abort(401, message='Cannot authenticate user. Invalid Token')
 
+def get_user(user):
+    '''Returns the content of a user object after creation
+    '''
+    return {'id': user.id,
+            'username': user.username,
+            'date_created': str(user.date_created)}
+
 def get_bucketlist(bucketlist):
     '''Returns the result of getting a single bucketlist
     '''
     return {'id': bucketlist.id,
             'name': bucketlist.name,
             'items': get_all_bucketlist_item(bucketlist.id),
-            'date_created': bucketlist.date_created,
-            'date_modified': bucketlist.date_modified,
+            'date_created': str(bucketlist.date_created),
+            'date_modified': str(bucketlist.date_modified),
             'created_by': bucketlist.created_by}
 
 def get_single_bucketlist_item(bucketlist_item):
@@ -31,8 +38,8 @@ def get_single_bucketlist_item(bucketlist_item):
     '''
     return {'id': bucketlist_item.id,
             'name': bucketlist_item.name,
-            'date_created': bucketlist_item.date_created,
-            'date_modified': bucketlist_item.date_modified,
+            'date_created': str(bucketlist_item.date_created),
+            'date_modified': str(bucketlist_item.date_modified),
             'done': bucketlist_item.done}
 
 def get_all_bucketlist_item(bucketlist_id):
@@ -78,11 +85,6 @@ def save_model(model):
         return True
     except:
         return False
-
-def save_resource_msg(data):
-    msg = {'message': 'Saved'}
-    msg.update(data)
-    return msg
 
 messages = {'username_not_found': {'message': 'username does not exist'},
             'password_incorrect': {'message': 'Password incorrect'},
