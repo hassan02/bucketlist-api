@@ -90,7 +90,7 @@ class SingleBucketList(Resource):
         bucketlist = BucketList.query.filter_by(
             id=id).first()
         bucketlist_output = get_bucketlist(bucketlist)
-        return jsonify({'data': bucketlist_output})
+        return {'data': bucketlist_output}, 200
 
     @auth.user_is_login
     @auth.bucketlist_exist
@@ -151,21 +151,30 @@ class AllBucketLists(Resource):
         Returns:
             json: All bucketlists with their content
         '''
-        limit = int(request.args.get('limit', 20))
+        params = request.args.to_dict()
+        limit = int(params.get('limit', 20))
         limit = 100 if int(limit) > 100 else limit
-        limit = int(limit)
-        search_by = request.args.get('q', '')
-        page = int(request.args.get('page', 1))
+        search_by = params.get('q', '')
+        page = int(params.get('page', 1))
         token = request.headers.get('Token')
         user_id = get_current_user_id(token)
-        start_at = (page * limit) - limit;
-        end_at = (page * limit);
         all_bucketlist = BucketList.query.filter_by(
-            created_by=user_id).filter(BucketList.name.like('%{}%'.format(search_by))).all()[start_at:end_at]
-        #all_bucketlist = all_bucketlist.paginate(page=page, per_page=limit, error_out=False)
+            created_by=user_id).filter(BucketList.name.like('%{}%'.\
+            format(search_by))).paginate(page=page, per_page=limit, \
+            error_out=False)
+        next_page = str(request.url_root) + 'api/v1/bucketlists?' + \
+                'limit=' + str(limit) + '&page=' + str(page + 1) \
+                if all_bucketlist.has_next else None
+        previous_page = request.url_root + 'api/v1/bucketlists?' + \
+                'limit=' + str(limit) + '&page=' + str(page - 1) \
+                if all_bucketlist.has_prev else None
         bucketlist_output = [get_bucketlist(
-                bucketlist) for bucketlist in all_bucketlist]
-        return {'data': bucketlist_output}, 200
+                bucketlist) for bucketlist in all_bucketlist.items]
+
+        return {'data': bucketlist_output,
+                'pages': all_bucketlist.pages,
+                'previous_page': previous_page,
+                'next_page': next_page}, 200
 
     @auth.user_is_login
     def post(self):
