@@ -158,18 +158,19 @@ class AllBucketLists(Resource):
         page = int(params.get('page', 1))
         token = request.headers.get('Token')
         user_id = get_current_user_id(token)
-        all_bucketlist = BucketList.query.filter_by(
-            created_by=user_id).filter(BucketList.name.like('%{}%'.\
-            format(search_by))).paginate(page=page, per_page=limit, \
-            error_out=False)
+        search_results = BucketList.query.filter_by(
+            created_by=user_id).filter(BucketList.name.like('%{}%'.format
+                                                            (search_by)))
+        all_bucketlist = search_results.paginate(
+            page=page, per_page=limit, error_out=False)
         next_page = str(request.url_root) + 'api/v1/bucketlists?' + \
-                'limit=' + str(limit) + '&page=' + str(page + 1) \
-                if all_bucketlist.has_next else None
+            'limit=' + str(limit) + '&page=' + str(page + 1) \
+            if all_bucketlist.has_next else None
         previous_page = request.url_root + 'api/v1/bucketlists?' + \
-                'limit=' + str(limit) + '&page=' + str(page - 1) \
-                if all_bucketlist.has_prev else None
+            'limit=' + str(limit) + '&page=' + str(page - 1) \
+            if all_bucketlist.has_prev else None
         bucketlist_output = [get_bucketlist(
-                bucketlist) for bucketlist in all_bucketlist.items]
+            bucketlist) for bucketlist in all_bucketlist.items]
 
         return {'data': bucketlist_output,
                 'pages': all_bucketlist.pages,
@@ -198,7 +199,8 @@ class AllBucketLists(Resource):
                 return messages['bucketlist_exist'], 406
             else:
                 bucketlist = BucketList(name, current_user)
-                return (get_bucketlist(bucketlist), 201) if save_model(bucketlist) \
+                return (get_bucketlist(bucketlist), 201) if \
+                    save_model(bucketlist) \
                     else (messages['bucketlist_not_saved'], 400)
         else:
             return messages['no_bucketlist_name'], 406
@@ -255,7 +257,8 @@ class SingleBucketListItem(Resource):
     @auth.bucketlist_item_exist
     def put(self, id, item_id):
         '''
-        Updates a single bucketlistitem given the item_id and the bucketlist_id.
+        Updates a single bucketlistitem given the item_id
+        and the bucketlist_id
         URL:
             /api/v1/bucketlists/<id>/items/<item_id>
         Args:
@@ -279,7 +282,8 @@ class SingleBucketListItem(Resource):
         if not check_bucketlist_item_details:
             bucketlist_item.name = name
             bucketlist_item.done = done
-            return (get_single_bucketlist_item(bucketlist_item), 200) if update_database() \
+            return (get_single_bucketlist_item(bucketlist_item), 200) \
+                if update_database() \
                 else (messages['bucketlist_item_not_updated'], 400)
         else:
             return messages['bucketlist_item_exist'], 406
@@ -289,7 +293,8 @@ class SingleBucketListItem(Resource):
     @auth.bucketlist_item_exist
     def delete(self, id, item_id):
         '''
-        Deletes a single bucketlistitem given the item_id and the bucketlist_id.
+        Deletes a single bucketlistitem given the item_id
+        and the bucketlist_id.
         URL:
             /api/v1/bucketlists/<id>/items/<item_id>
         Args:
