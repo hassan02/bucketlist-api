@@ -62,7 +62,7 @@ class TestBucketList(unittest.TestCase):
         self.bucketlist_response = self.app.post('/api/v1/bucketlists/',
                                                data={'name': 'BucketList1'},
                                                headers={'Token': self.token})
-        self.assertEqual(self.bucketlist_response.status_code, 400)
+        self.assertEqual(self.bucketlist_response.status_code, 406)
         result = json.loads(self.bucketlist_response.data)
         self.assertEqual(result['message'],
                          'Bucketlist already exist')
@@ -72,7 +72,7 @@ class TestBucketList(unittest.TestCase):
         self.bucketlist_response = self.app.post('/api/v1/bucketlists/',
                                                data={'name': ''},
                                                headers={'Token': self.token})
-        self.assertEqual(self.bucketlist_response.status_code, 400)
+        self.assertEqual(self.bucketlist_response.status_code, 406)
         result = json.loads(self.bucketlist_response.data)
         self.assertEqual(result['message'],
                          'Please supply bucketlist name')
@@ -85,8 +85,7 @@ class TestBucketList(unittest.TestCase):
                                                headers={'Token': self.token})
         self.assertEqual(self.bucketlist_response.status_code, 200)
         result = json.loads(self.bucketlist_response.data)
-        self.assertEqual(result['message'],
-                         'Cannot locate any bucketlist')
+        self.assertEqual(result, {'data': []})
 
     def test_get_all_bucketlist(self):
         self.create_bucketlist()
@@ -165,7 +164,7 @@ class TestBucketList(unittest.TestCase):
                                           data={
                                               'name': 'I want to buy a Ferrarri'},
                                           headers={'Token': self.token})
-        self.assertEqual(bucketlist_item_response.status_code, 400)
+        self.assertEqual(bucketlist_item_response.status_code, 406)
 
     def test_post_bucketlist_item_with_existing_name(self):
         self.create_bucketlist_item()
@@ -174,7 +173,7 @@ class TestBucketList(unittest.TestCase):
                                           data={
                                               'name': 'I want to buy a Ferrarri'},
                                           headers={'Token': self.token})
-        self.assertEqual(bucketlist_item_response.status_code, 400)
+        self.assertEqual(bucketlist_item_response.status_code, 406)
         result = json.loads(bucketlist_item_response.data)
         self.assertEqual(result['message'],
                          'Bucketlist item already exist')
@@ -186,7 +185,7 @@ class TestBucketList(unittest.TestCase):
                                           data={
                                               'name': ''},
                                           headers={'Token': self.token})
-        self.assertEqual(bucketlist_item_response.status_code, 400)
+        self.assertEqual(bucketlist_item_response.status_code, 406)
         result = json.loads(bucketlist_item_response.data)
         self.assertEqual(result['message'],
                          'Please supply name for your bucketlist item')
