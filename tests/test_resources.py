@@ -85,7 +85,8 @@ class TestBucketList(unittest.TestCase):
                                                headers={'Token': self.token})
         self.assertEqual(self.bucketlist_response.status_code, 200)
         result = json.loads(self.bucketlist_response.data)
-        self.assertEqual(result, {'data': []})
+        self.assertEqual(result, {'data': [], 'pages': 0, 'previous_page': None,\
+                                    'next_page': None })
 
     def test_get_all_bucketlist(self):
         self.create_bucketlist()
