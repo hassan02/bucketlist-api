@@ -7,8 +7,6 @@ from .resources import *
 
 app = Flask(__name__)
 app.config.from_object('config.DevelopmentConfig')
-app.config['JSON_SORT_KEYS'] = False
-
 api = Api(app=app, prefix='/api/v1/')
 api.add_resource(LoginUser, 'auth/login')
 api.add_resource(RegisterUser, 'auth/register')

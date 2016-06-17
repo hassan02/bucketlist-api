@@ -1,11 +1,9 @@
-import json
-
-from flask import jsonify, request
+from flask import request
 from flask.ext.restful import Resource
 
 from .decorators import auth
 from .helpers import *
-from .models import db, User, BucketList, BucketListItem
+from .models import User, BucketList, BucketListItem
 
 
 class LoginUser(Resource):

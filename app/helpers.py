@@ -1,5 +1,4 @@
 import jwt
-import json
 
 from flask import current_app
 from flask_restful import abort

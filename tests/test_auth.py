@@ -1,7 +1,7 @@
 import unittest
 import hashlib
 
-from app.models import SQLAlchemy, User, BucketList, BucketListItem
+from app.models import User
 from app.app import app
 from app.helpers import *
 from helpers import *
