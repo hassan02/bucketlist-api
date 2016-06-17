@@ -69,20 +69,8 @@ This is a Python Checkpoint2 project for D0B fellows in Andela. It's a flask app
   </tr>
 
   <tr>
-  <td>Get all items in this bucket list</td>
-  <td>GET /bucketlists/{id}/items </td>
-  <td>False</td>
-  </tr>
-
-  <tr>
   <td>Create new item in this bucket list</td>
   <td>POST /bucketlists/{id}/items </td>
-  <td>False</td>
-  </tr>
-
-  <tr>
-  <td>Get this bucket list item</td>
-  <td>GET /bucketlists/{id}/items/{item_id} </td>
   <td>False</td>
   </tr>
 
@@ -106,103 +94,167 @@ Before making requests, make sure the server is running by running python server
 
 1A. Request to register with the username `hassan` and password `hassan`
 ```
- curl -X POST -d "username=hassan&password=hassan" http://127.0.0.1:5000/api/v1/auth/register
+ curl -i -X POST -d "username=hassan&password=hassan" http://127.0.0.1:5000/api/v1/auth/register
 ```
 1B. Response to request in 1A
 ```
+HTTP/1.0 201 CREATED
+Content-Type: application/json
+Content-Length: 87
+Server: Werkzeug/0.10.4 Python/2.7.11
+Date: Thu, 16 Jun 2016 20:40:49 GMT
+
 {
-    "message": "You have been registered. Please login"
+    "date_created": "2016-06-16 20:40:49",
+    "id": 1,
+    "username": "hassan"
 }
 ```
 
 2A. Request to login with the username `hassan` and password `hassan`
 ```
-curl -X POST -d "username=adebai&password=adebai" http://127.0.0.1:5000/api/v1/auth/login
+curl -i -X POST -d "username=hassan&password=hassan" http://127.0.0.1:5000/api/v1/auth/login
 ```
 2B. Response to request in 2A
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 156
+Server: Werkzeug/0.10.4 Python/2.7.11
+Date: Thu, 16 Jun 2016 20:43:19 GMT
+
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkZWJhaSIsInBhc3N3b3JkIjoiYWRlYmFpIn0.NdypjQZa1kEwltn8gEvlb4H17KWKVdzqKXgbuwA6fFw"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhhc3NhbiIsInBhc3N3b3JkIjoiaGFzc2FuIn0.0QLDv1CISkSH65KAFu1rY58UbGsC06mw89ykAFjY2og"
 }
 ```
 
 3A. Request to create a new bucketlist
 ```
-curl -X POST -d "name=Learn new languages" http://127.0.0.1:5000/api/v1/bucketlists/ -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkZWJhaSIsInBhc3N3b3JkIjoiYWRlYmFpIn0.NdypjQZa1kEwltn8gEvlb4H17KWKVdzqKXgbuwA6fFw"
+curl -i -X POST -d "name=Learn new languages" http://127.0.0.1:5000/api/v1/bucketlists/ -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhhc3NhbiIsInBhc3N3b3JkIjoiaGFzc2FuIn0.0QLDv1CISkSH65KAFu1rY58UbGsC06mw89ykAFjY2og"
 ```
 3B. Response to request in 3A
 ```
+{HTTP/1.0 201 CREATED
+Content-Type: application/json
+Content-Length: 181
+Server: Werkzeug/0.10.4 Python/2.7.11
+Date: Thu, 16 Jun 2016 20:52:10 GMT
+
 {
-    "created_by": 3,
-    "message": "Saved",
+    "created_by": 1,
+    "date_created": "2016-06-16 20:52:10",
+    "date_modified": "2016-06-16 20:52:10",
+    "id": 1,
+    "items": [],
     "name": "Learn new languages"
 }
 ```
 
 4A. Request to get all bucketlists
 ```
-curl -X GET http://127.0.0.1:5000/api/v1/bucketlists/ -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkZWJhaSIsInBhc3N3b3JkIjoiYWRlYmFpIn0.NdypjQZa1kEwltn8gEvlb4H17KWKVdzqKXgbuwA6fFw"
+curl -X GET http://127.0.0.1:5000/api/v1/bucketlists/ -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhhc3NhbiIsInBhc3N3b3JkIjoiaGFzc2FuIn0.0QLDv1CISkSH65KAFu1rY58UbGsC06mw89ykAFjY2og"
 ```
 4B. Response to request in 4A
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 338
+Server: Werkzeug/0.10.4 Python/2.7.11
+Date: Thu, 16 Jun 2016 21:01:42 GMT
+
 {
-  "data": [
-    {
-      "name": "Learn new languages",
-      "date_modified": "Mon, 13 Jun 2016 13:45:23 GMT",
-      "items": [],
-      "created_by": 3,
-      "date_created": "Mon, 13 Jun 2016 13:45:23 GMT",
-      "id": 11
-    }
-  ]
+    "data": [
+        {
+            "created_by": 1,
+            "date_created": "2016-06-16 20:57:20",
+            "date_modified": "2016-06-16 20:57:20",
+            "id": 1,
+            "items": [],
+            "name": "Learn new languages"
+        }
+    ],
+    "next_page": null,
+    "pages": 1,
+    "previous_page": null
 }
 ```
 
 5A. Request to update a bucketlist name
 ```
-curl -X PUT -d "name=Learn new foreign languages" http://127.0.0.1:5000/api/v1/bucketlists/11 -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkZWJhaSIsInBhc3N3b3JkIjoiYWRlYmFpIn0.NdypjQZa1kEwltn8gEvlb4H17KWKVdzqKXgbuwA6fFw"
+curl -i -X PUT -d "name=Learn new foreign languages" http://127.0.0.1:5000/api/v1/bucketlists/1 -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhhc3NhbiIsInBhc3N3b3JkIjoiaGFzc2FuIn0.0QLDv1CISkSH65KAFu1rY58UbGsC06mw89ykAFjY2og"
 ```
 5B. Response to request in 5A
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 189
+Server: Werkzeug/0.10.4 Python/2.7.11
+Date: Fri, 17 Jun 2016 08:13:17 GMT
+
 {
-    "message": "Bucketlist updated"
+    "created_by": 1,
+    "date_created": "2016-06-16 20:57:20",
+    "date_modified": "2016-06-17 08:13:17",
+    "id": 1,
+    "items": [],
+    "name": "Learn new foreign languages"
 }
 ```
 
 6A. Request to create a bucketlist item
 ```
-curl -X POST -d "name=Learn French" http://127.0.0.1:5000/api/v1/bucketlists/11/items/ -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkZWJhaSIsInBhc3N3b3JkIjoiYWRlYmFpIn0.NdypjQZa1kEwltn8gEvlb4H17KWKVdzqKXgbuwA6fFw"
+curl -i -X POST -d "name=Learn French" http://127.0.0.1:5000/api/v1/bucketlists/1/items -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhhc3NhbiIsInBhc3N3b3JkIjoiaGFzc2FuIn0.0QLDv1CISkSH65KAFu1rY58UbGsC06mw89ykAFjY2og"
 ```
 6B. Response to request in 6A
 ```
+HTTP/1.0 201 CREATED
+Content-Type: application/json
+Content-Length: 158
+Server: Werkzeug/0.10.4 Python/2.7.11
+Date: Fri, 17 Jun 2016 08:15:22 GMT
+
 {
-    "bucketlist_id": 11,
-    "message": "Saved",
+    "date_created": "2016-06-17 08:15:22",
+    "date_modified": "2016-06-17 08:15:22",
+    "done": false,
+    "id": 1,
     "name": "Learn French"
 }
 ```
 
-7A. Request to get all bucketlist items
+7A. Request to update a bucketlist item
 ```
-curl -X GET http://127.0.0.1:5000/api/v1/bucketlists/11/items/ -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkZWJhaSIsInBhc3N3b3JkIjoiYWRlYmFpIn0.NdypjQZa1kEwltn8gEvlb4H17KWKVdzqKXgbuwA6fFw"
+curl -i -X PUT -d "name=Learn German" http://127.0.0.1:5000/api/v1/bucketlists/1/items/1 -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhhc3NhbiIsInBhc3N3b3JkIjoiaGFzc2FuIn0.0QLDv1CISkSH65KAFu1rY58UbGsC06mw89ykAFjY2og"
 ```
 7B. Response to request in 7A
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 154
+Server: Werkzeug/0.10.4 Python/2.7.11
+Date: Fri, 17 Jun 2016 08:18:25 GMT
+
 {
-  "items": [
-    {
-      "date_created": "Mon, 13 Jun 2016 14:00:04 GMT",
-      "date_modified": "Mon, 13 Jun 2016 14:00:04 GMT",
-      "done": false,
-      "id": 13,
-      "name": "Learn French"
-    }
-  ]
+    "date_created": "2016-06-17 08:15:22",
+    "date_modified": "2016-06-17 08:18:25",
+    "done": false,
+    "id": 1,
+    "name": "Learn German"
 }
 ```
 
-
+8A. Request to delete a bucketlist item
+```
+curl -i -X DELETE http://127.0.0.1:5000/api/v1/bucketlists/1/items/1 -H "Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhhc3NhbiIsInBhc3N3b3JkIjoiaGFzc2FuIn0.0QLDv1CISkSH65KAFu1rY58UbGsC06mw89ykAFjY2og"
+```
+8B. Response to request in 8A
+```
+HTTP/1.0 204 NO CONTENT
+Content-Type: application/json
+Content-Length: 0
+Server: Werkzeug/0.10.4 Python/2.7.11
+Date: Fri, 17 Jun 2016 08:20:39 GMT
+```
 
 ## Running tests
 1. Navigate to the project direcory
