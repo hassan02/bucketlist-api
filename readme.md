@@ -17,7 +17,10 @@ This is a Python Checkpoint2 project for D0B fellows in Andela. It's a flask app
 ```pip install -r requirements.txt```
 
 4. Run the app
-  * Make migrations by running `python manage.py db upgrade` to create necessary tables needed for the app.
+  * Make migrations by running the following commands.<br>
+      - `python manage.py db create_db` to create the database  for the app.
+      - `python manage.py db migrate` to create necessary tables in the database.
+      - `python manage.py db upgrade` to apply migrated changes
   * Run ```python server.py``` to get the app running
 
 ## Functionality, Endpoints and Accessiblity
