@@ -264,7 +264,7 @@ Date: Fri, 17 Jun 2016 08:20:39 GMT
 2. Run nosetests --with-coverage to run test and check coverage
 
 ##Project Demo
-Click <a href='https://youtu.be/-Gcau1z1lUU'>here </a> to view the project demo
+Click <a href='https://youtu.be/SxhpTVLr3uQ'>here </a> to view the project demo
 
 ## References
 http://blog.miguelgrinberg.com/ <br />
