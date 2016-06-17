@@ -1,5 +1,5 @@
-import sqlite3
 import os
+import sqlite3
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 database_name = os.path.join(BASEDIR, 'bucketlist_test.sqlite')
